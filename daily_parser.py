@@ -12,7 +12,7 @@ def addNewGames(start_time, game_id):
 
 	cur = db.cursor()
 
-	# get games that have started and haven't finished
+	# insert the game with game_id into the database at start_time
 	query = "INSERT INTO `games` (start_time, finished, game_id) VALUES ('%s', 0, '%s');" % (start_time, game_id)
 	cur.execute(query)
 
