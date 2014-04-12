@@ -32,12 +32,14 @@ def generateSummary(gameData):
 	# errors
 	blurbs.append(Summarize.get_errors(gameData))
 
-	#perfect game
+	# perfect game
 	blurbs.append(Summarize.get_perfect_game(gameData))
 
-	#mvp batter
+	# mvp batter
 	blurbs.append(Summarize.get_mvp_batter(gameData))
 
+	# winning pitcher
+	blurbs.append(Summarize.get_winning_pitcher(gameData))
 
 	# get top 3 blurbs
 	blurbs.sort()
@@ -45,7 +47,7 @@ def generateSummary(gameData):
 
 	for i in range(0, len(blurbs)):
 		if blurbs[i][0] > 0:
-			summary = summary + ' {' + str(blurbs[i][0]) + '} ' + blurbs[i][1]
+			summary = summary + " " + blurbs[i][1]
 
 	return summary
 
