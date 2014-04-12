@@ -32,12 +32,14 @@ def generateSummary(gameData):
 	# errors
 	blurbs.append(Summarize.get_errors(gameData))
 
-	#perfect game
+	# perfect game
 	blurbs.append(Summarize.get_perfect_game(gameData))
 
-	#mvp batter
+	# mvp batter
 	blurbs.append(Summarize.get_mvp_batter(gameData))
 
+	# winning pitcher
+	blurbs.append(Summarize.get_winning_pitcher(gameData))
 
 	# get top 3 blurbs
 	blurbs.sort()
