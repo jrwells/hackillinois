@@ -13,10 +13,10 @@ class Metrics:
 
 		for inning in linescore['inning_line_score']:
 			if inning['home'] == 'x':
-				home_inning_runs[inning['inning'] - 1] = 0
+				home_inning_runs[int(inning['inning']) - 1] = 0
 			else:
-				home_inning_runs[inning['inning'] - 1] = (float(inning['home'])/home_runs
-			away_inning_runs[inning['inning'] - 1] = float(inning['away'])/away_runs
+				home_inning_runs[int(inning['inning']) - 1] = (float(inning['home'])/home_runs
+			away_inning_runs[int(inning['inning']) - 1] = float(inning['away'])/away_runs
 
 		away_max, home_max = max(away_inning_runs), max(home_inning_runs)
 		away_tuple, home_tuple = (away_max, away_inning_runs.index(away_max) + 1), (home_max, home_inning_runs.index(home_max) + 1)
