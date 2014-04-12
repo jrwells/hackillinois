@@ -110,7 +110,7 @@ class Summarize:
 				pitchers = team['pitcher']
 				if type(pitchers) is not list:
 					if len(no_hitter_text) == 0:
-						no_hitter_text = pitchers['name'].partition(', ')[0]
+						no_hitter_text = pitchers['name'].split(', ')[0]
 					else:
 						no_hitter_text = no_hitter_text + " and " + pitchers['name']
 				else:
@@ -139,7 +139,7 @@ class Summarize:
 					if int(team_batting['h']) == 0 and int(team_batting['lob']) == 0 and int(team_batting['r']) == 0:
 						pitchers = team_pitching['pitcher']
 						if type(pitchers) is not list:
-							perfect_game_text = pitchers['name'].partition(', ')[0]
+							perfect_game_text = pitchers['name'].split(', ')[0]
 						else:
 							if team_pitching['team_flag'] == 'away':
 								perfect_game_text = game_data['boxscore']['away_fname']
@@ -188,13 +188,13 @@ class Summarize:
 					multiple_ks = ''
 					if int(pitchers['so']) > 1:
 						multiple_ks = 's'
-					return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA" % (pitchers['name'], pitchers['so'], multiple_ks, pitchers['era']))
+					return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA." % (pitchers['name_display_first_last'].split(' ')[1], pitchers['so'], multiple_ks, pitchers['era']))
 			else:
 				for pitcher in pitchers:
 					if 'win' in pitcher.keys() and pitcher['win'] == 'true':
 						multiple_ks = ''
 						if int(pitcher['so']) > 1:
 							multiple_ks = 's'
-						return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA" % (pitcher['name'], pitcher['so'], multiple_ks, pitcher['era']))
+						return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA." % (pitcher['name_display_first_last'].split(' ')[1], pitcher['so'], multiple_ks, pitcher['era']))
 		return (DO_NOT_MENTION_VALUE, "")
 				
