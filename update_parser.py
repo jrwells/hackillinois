@@ -38,6 +38,7 @@ queue = getUnfinishedGames()
 if queue:
 	# master_scoreboard = requests.get(url).json()
 	master_scoreboard = json.load(open("master_scoreboard.json"))
+	loops = 0
 
 	for record in master_scoreboard['data']['games']['game']:
 		if record['id'] in queue:
@@ -47,6 +48,10 @@ if queue:
 
 				query = "UPDATE `games` SET `finished` = 1, `full_summary` = '%s', `teaser_text` = '%s' WHERE `game_id` = '%s' LIMIT 1;" % (summary, teaserText, record['id'])
 				cur.execute(query)
+
+				loops = loops + 1
+
+	print "Updated %d games" % loops
 
 
 else:
