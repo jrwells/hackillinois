@@ -6,6 +6,7 @@ GRAND_SLAM_RUNNER_COUNT = 3
 DO_NOT_MENTION_VALUE = 0
 NO_HITTER_VALUE = 10
 MVP_BATTER_VALUE = 2
+WINNING_PITCHER_VALUE = 4
 PERFECT_GAME_VALUE = 10
 
 # arbitrary ranking constants
@@ -97,26 +98,25 @@ class Summarize:
 	@staticmethod
 	def get_no_hitter(game_data):
 		no_hitter_text = ""
-		if game_data['boxscore']:
-			for team in game_data['boxscore']['pitching']:
-				if int(team['h']) == 0:
-					pitchers = team['pitcher']
-					if type(pitchers) is not list:
-						if len(no_hitter_text) == 0:
-							no_hitter_text = pitchers['name'].partition(', ')[0]
-						else:
-							no_hitter_text = no_hitter_text + " and " + pitchers['name']
+		for team in game_data['boxscore']['pitching']:
+			if int(team['h']) == 0:
+				pitchers = team['pitcher']
+				if type(pitchers) is not list:
+					if len(no_hitter_text) == 0:
+						no_hitter_text = pitchers['name'].partition(', ')[0]
 					else:
-						if len(no_hitter_text) == 0:
-							if team['team_flag'] == 'away':
-								no_hitter_text = game_data['boxscore']['away_fname']
-							else:
-								no_hitter_text = game_data['boxscore']['home_sname']
+						no_hitter_text = no_hitter_text + " and " + pitchers['name']
+				else:
+					if len(no_hitter_text) == 0:
+						if team['team_flag'] == 'away':
+							no_hitter_text = game_data['boxscore']['away_fname']
 						else:
-							if team['team_flag'] == 'away':
-								no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['away_fname']
-							else:
-								no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['home_sname']
+							no_hitter_text = game_data['boxscore']['home_sname']
+					else:
+						if team['team_flag'] == 'away':
+							no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['away_fname']
+						else:
+							no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['home_sname']
 			if len(no_hitter_text) > 0:
 				no_hitter_text += " pitched a no hitter."
 				return (NO_HITTER_VALUE, no_hitter_text)
@@ -126,19 +126,18 @@ class Summarize:
 	@staticmethod
 	def get_perfect_game(game_data):
 		perfect_game_text = ""
-		if game_data['boxscore']:
-			for team_pitching in game_data['boxscore']['pitching']:
-				for team_batting in game_data['boxscore']['batting']:
-					if team_pitching['team_flag'] != team_batting['team_flag']:
-						if int(team_batting['h']) == 0 and int(team_batting['lob']) == 0 and int(team_batting['r']) == 0:
-							pitchers = team_pitching['pitcher']
-							if type(pitchers) is not list:
-								perfect_game_text = pitchers['name'].partition(', ')[0]
+		for team_pitching in game_data['boxscore']['pitching']:
+			for team_batting in game_data['boxscore']['batting']:
+				if team_pitching['team_flag'] != team_batting['team_flag']:
+					if int(team_batting['h']) == 0 and int(team_batting['lob']) == 0 and int(team_batting['r']) == 0:
+						pitchers = team_pitching['pitcher']
+						if type(pitchers) is not list:
+							perfect_game_text = pitchers['name'].partition(', ')[0]
+						else:
+							if team_pitching['team_flag'] == 'away':
+								perfect_game_text = game_data['boxscore']['away_fname']
 							else:
-								if team_pitching['team_flag'] == 'away':
-									perfect_game_text = game_data['boxscore']['away_fname']
-								else:
-									perfect_game_text = game_data['boxscore']['home_sname']
+								perfect_game_text = game_data['boxscore']['home_sname']
 		if len(perfect_game_text) > 0:
 			perfect_game_text += " pitched a perfect game!"
 			return (PERFECT_GAME_VALUE, perfect_game_text)
@@ -171,3 +170,16 @@ class Summarize:
 		mvp_batter_text = "%s hit well." % (mvp)
 		return (MVP_BATTER_VALUE, mvp_batter_text)
 
+	@staticmethod
+	def get_winning_pitcher(game_data):
+		for team in game_data['boxscore']['pitching']:
+			pitchers = team['pitcher']
+			if type(pitchers) is not list:
+				if 'win' in pitchers.keys() and pitchers['win'] == True:
+					return (WINNING_PITCHER_VALUE, "%s %s K %s ERA" % (pitchers['name'], pitchers['so'], pitchers['era'])
+			else:
+				for pitcher in pitchers:
+					if 'win' in pitcher.keys() and pitcher['win'] == True:
+						return (WINNING_PITCHER_VALUE, "%s %s K %s ERA" % (pitchers['name'], pitchers['so'], pitchers['era'])
+		return (DO_NOT_MENTION_VALUE, "")
+				
