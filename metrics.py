@@ -3,7 +3,7 @@ import urllib2, xml.etree.ElementTree as ET
 class Metrics:
 	@staticmethod
 	def InningRunsTotalRuns(game_data):
-		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = game_data['boxscore']['linescore'], 
+		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = game_data['boxscore']['linescore'],
 			float(game_data['boxscore']['home_team_runs']), float(game_data['boxscore']['away_team_runs']), [], []
 		for inning in linescore['inning_line_score']:
 			for key in inning.keys():
@@ -92,7 +92,7 @@ class Metrics:
 				#calculate the diff between current and season batting average
 				hits = float(batter['h'])
 				at_bats = float(batter['ab'])
-				#only calculate for players who batted 
+				#only calculate for players who batted
 				if at_bats > 0:
 					game_average = hits / at_bats
 					season_average = float(batter['avg'])
