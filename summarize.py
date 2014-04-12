@@ -1,4 +1,5 @@
 ERROR_INTEREST_THRESHOLD = 3
+GRAND_SLAM_RUNNER_COUNT = 3
 
 class Summarize:
 
@@ -45,3 +46,27 @@ class Summarize:
 			score = 0
 
 		return (score, error_summary_text)
+
+	@staticmethod
+	def get_home_runs(game_data):
+		home_run_summary_text = None
+
+		# check for grand slams
+		game_home_runs = game_data['home_runs']['player']
+
+		for hr in game_home_runs:
+			if hr['runners'] == GRAND_SLAM_RUNNER_COUNT:
+				home_run_summary_text = hr['last'] + " hit grand slam."
+				return (6, home_run_summary_text)
+
+		# report player home runs
+		max_hr = 0
+		max_hr_name = None
+		for hr in game_home_runs:
+			if hr['runners'] > max_hr:
+				max_hr = hr['runners']
+				max_hr_name = hr['last']
+
+		home_run_summary_text = max_hr_name + " hit home run."
+
+		return (4, home_run_summary_text)
