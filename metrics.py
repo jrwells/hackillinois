@@ -10,8 +10,7 @@ class Metrics:
 				elif key == 'away':
 					away_inning_runs.append(float(inning[key])/away_runs)
 		away_max, home_max = (max(away_inning_runs), away_inning_runs.index(max(away_inning_runs))), (max(home_inning_runs), home_inning_runs.index(max(home_inning_runs)))
-		away_avg, home_avg = sum(away_inning_runs)/len(away_inning_runs), sum(home_inning_runs)/len(home_inning_runs)
-		return ((away_max, away_avg), (home_max, home_avg))
+		return (away_max, home_max)
 
 	@staticmethod
 	def WalksAndBalks(game_data):
