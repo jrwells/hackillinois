@@ -80,9 +80,6 @@ class Metrics:
 							first_home = int(event.get("inning"))
 						total_home += 1
 
-		away_result = (first_away, total_away)
-		home_result = (first_home, total_home)
-
 		result = {
 			"first_sub_away" : first_away,
 			"total_subs_away" : total_away,
