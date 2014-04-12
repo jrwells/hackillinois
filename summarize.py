@@ -1,7 +1,8 @@
-class summarize:
+ERROR_INTEREST_THRESHOLD = 3
 
-	ERROR_INTEREST_THRESHOLD = 3
+class Summarize:
 
+	@staticmethod
 	def get_winner(game_data):
 		runs_scored = game_data['linescore']['r']
 		if int(runs_scored['home']) > int(runs_scored['away']):
@@ -15,9 +16,9 @@ class summarize:
 			loser = game_data['home_team_name']
 			loser_score = runs_scored['home']
 
-		return "%s defeated %s %d - %d" % (winner, loser, winner_score, loser_score)
+		return "%s defeated %s %s - %s. " % (winner, loser, winner_score, loser_score)
 
-
+	@staticmethod
 	def get_errors(game_data):
 		error_count = game_data['linescore']['e']
 		error_summary_text = None
