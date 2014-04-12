@@ -51,7 +51,7 @@ if queue:
 
 				loops = loops + 1
 
-	print "Updated %d games" % loops
+	print "Updated %d game(s)" % loops
 
 
 else:
