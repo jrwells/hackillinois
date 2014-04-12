@@ -9,14 +9,21 @@ class Metrics:
 		""" Gets the innings where the most proportion of runs """
 
 		boxscore = game_data['boxscore']
-		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = boxscore['linescore'], float(boxscore['home_team_runs']), float(boxscore['away_team_runs']), [], []
+		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = boxscore['linescore'], float(boxscore['linescore']['home_team_runs']), float(boxscore['linescore']['away_team_runs']), [], []
 
 		for inning in linescore['inning_line_score']:
 			for key in inning.keys():
 				if key == 'home':
-					home_inning_runs.append(float(inning[key])/home_runs)
+					try:
+						home_inning_runs.append(float(inning[key])/home_runs)
+					except:
+						home_inning_runs.append(0)
 				elif key == 'away':
-					away_inning_runs.append(float(inning[key])/away_runs)
+					try:
+						away_inning_runs.append(float(inning[key])/away_runs)
+					except:
+						away_inning_runs.append(0)
+
 		away_max, home_max = max(away_inning_runs), max(home_inning_runs)
 		away_tuple, home_tuple = (away_max, away_inning_runs.index(away_max)), (home_max, home_inning_runs.index(home_max))
 		return (away_tuple, home_tuple)
@@ -26,8 +33,8 @@ class Metrics:
 		""" Gets quantity of runs earned not by RBI (walks/balks/errors) """
 
 		runs_scored = game_data['linescore']['r']
-		runs_scored_away = runs_scored[1]
-		runs_scored_home = runs_scored[0]
+		runs_scored_away = runs_scored['away']
+		runs_scored_home = runs_scored['home']
 
 		for entry in game_data['boxscore']['batting']:
 			if entry['team_flag'] == 'home':
@@ -35,7 +42,7 @@ class Metrics:
 			else:
 				rbi_away = entry['rbi']
 
-		return (runs_scored_away - rbi_away, runs_scored_home - rbi_home)
+		return (int(runs_scored_away) - int(rbi_away), int(runs_scored_home) - int(rbi_home))
 
 	@staticmethod
 	def GetEventLog(game_data):
@@ -72,7 +79,7 @@ class Metrics:
 					else:
 
 						# set first if not yet set
-						if first_home = None:
+						if first_home == None:
 							first_home = int(event.get("inning"))
 
 						total_home += 1
@@ -92,7 +99,7 @@ class Metrics:
 		#index for team
 		team_index = 1
 		#Away @ Home
-		average_difference = (0, 0)
+		average_difference = [0,0]
 		for team in boxscore['batting']:
 			#count players on team, who had at bats
 			count = 0
@@ -111,7 +118,7 @@ class Metrics:
 			#change the team index
 			team_index = 0
 
-		return average_difference
+		return (average_difference[0],average_difference[1])
 
 	@staticmethod
 	def LeadChanges(game_data):
@@ -121,8 +128,10 @@ class Metrics:
 		away_score, home_score = 0, 0
 		away_winning, home_winning = False, False
 		for i in game_data['linescore']['inning']:
+
 			away_score += int(i['away'])
-			home_score += int(i['home'])
+			if 'home' in i:
+				home_score += int(i['home'])
 
 			if (away_score > home_score) and not away_winning:
 				away_winning = True
@@ -142,7 +151,7 @@ class Metrics:
 	@staticmethod
 	def RBIDistribution(game_data):
 		""" Returns a list of players for each team with a percentage of RBIs for their team
-			over RBI_THRESHOLD_PERCENT. Returns a tuple of lists of tuples: 
+			over RBI_THRESHOLD_PERCENT. Returns a tuple of lists of tuples:
 			([(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)],[(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)]) """
 
 		boxscore = game_data['boxscore']

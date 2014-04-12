@@ -1,5 +1,6 @@
 import datetime, json, urllib2, MySQLdb
 from summarize import *
+from metrics import *
 
 def resetDB():
 	query = "UPDATE `games` SET `finished` = 0;"
@@ -49,6 +50,26 @@ def generateSummary(gameData):
 		if blurbs[i][0] > 0:
 			summary = summary + " " + blurbs[i][1]
 
+	#inning runs total runs
+	summary += '<br> Inning Runs / Total Runs: %s' % (str(Metrics.InningRunsTotalRuns(gameData)))
+
+	#walked in runs
+	summary += '<br> Walked in Runs: %s' % (str(Metrics.WalksAndBalks(gameData)))
+
+	#pitching changes
+	summary += '<br> Pitching Changes: %s' % (str(Metrics.PitchingChangeDistribution(gameData)))
+
+	#Game batting ave
+	summary += '<br> Game Batting Aves: %s' % (str(Metrics.GameBattingAvgVsSeason(gameData)))
+
+	#Lead changes
+	summary += '<br> Lead Changes: %s' % (str(Metrics.LeadChanges(gameData)))
+
+	#RBI percentage
+	#summary += '<br> RBI Percentage: %s' % (str(Metrics.RBIDistribution(gameData)))
+
+	print summary
+
 	return summary
 
 def generateTeaserText(gameData):
@@ -88,7 +109,7 @@ if queue:
 				summary = generateSummary(record)
 				teaserText = generateTeaserText(record)
 
-				query = "UPDATE `games` SET `finished` = 1, `full_summary` = '%s', `teaser_text` = '%s' WHERE `game_id` = '%s' LIMIT 1;" % (summary, teaserText, record['id'])
+				query = "UPDATE `games` SET `finished` = 1, `full_summary` = '%s' WHERE `game_id` = '%s' LIMIT 1;" % (summary, record['id'])
 				cur.execute(query)
 
 				loops = loops + 1
