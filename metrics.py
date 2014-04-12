@@ -1,3 +1,5 @@
+import urllib2, xml.etree.ElementTree as ET
+
 class Metrics:
 	@staticmethod
 	def InningRunsTotalRuns(game_data):
@@ -30,7 +32,49 @@ class Metrics:
 		return (runs_scored_away - rbi_away, runs_scored_home - rbi_home)
 
 	@staticmethod
+	def GetEventLog(game_data):
+		""" Return the XML event log for a game as a string """
+		eventlog_url = "http://gd2.mlb.com" + game_data['game_data_directory'] + "/eventLog.xml"
+		return urllib2.urlopen(eventlog_url).read()
+
+	@staticmethod
 	def PitchingChangeDistribution(game_data):
+		""" Returns a tuple containing a tuple for each team:
+		    (inning of first change, number of changes) """
+
+		first_away, first_home = None, None
+		total_away, total_home = 0, 0
+
+		event_log = Metrics.GetEventLog(game_data)
+		root = ET.fromstring(event_log)
+
+		for team in root.findall("team"):
+			for event in team.findall("event"):
+
+				# check for pitching change
+				if "Pitching Change" in event.get("description"):
+
+					# update home or away accordingly
+					if team.get("home_team") == "false":
+
+						# set first if not yet set
+						if first_away == None:
+							first_away = int(event.get("inning"))
+
+						total_away += 1
+
+					else:
+
+						# set first if not yet set
+						if first_home = None:
+							first_home = int(event.get("inning"))
+
+						total_home += 1
+
+		away_result = (first_away, total_away)
+		home_result = (first_home, total_home)
+
+		return (away_result, home_result)
 
 	# Returns a tuple (Away,Home) of the average difference between players season
 	# batting average and their batting average in the current game
