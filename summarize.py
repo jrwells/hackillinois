@@ -104,4 +104,4 @@ class Summarize:
 				no_hitter_text += " had no hitter."
 				return (NO_HITTER_VALUE, no_hitter_text
 			else
-				(DO_NOT_MENTION_VALUE, no_hitter_text)
+				return (DO_NOT_MENTION_VALUE, no_hitter_text)
