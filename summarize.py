@@ -119,7 +119,7 @@ class Summarize:
 			else:
 				return (DO_NOT_MENTION_VALUE, no_hitter_text)
 
-
+	@staticmethod
 	def get_perfect_game(game_data):
 		perfect_game_text = ""
 		if game_data['boxscore']:
@@ -147,19 +147,21 @@ class Summarize:
 		boxscore = game_data['boxscore']
 		mvp = None
 		mvp_score = 0
-		for batter in boxscore['batting']['batter']:
-			#Compare this game's performance to their batting average for the season
-			#Used as a multiplier for mvp_score
-			mvp_multiplier = (float(batter['h']) / float(batter['ab']) ) / float(batter['avg'])
+		for team in boxscore['batting']:
+			for batter in team['batter']:
+				#Compare this game's performance to their batting average for the season
+				#Used as a multiplier for mvp_score
+				if float(batter['ab']) > 0 and float(batter['avg']) > 0:
+					mvp_multiplier = (float(batter['h']) / float(batter['ab']) ) / float(batter['avg'])
 
-			#arbitrary ranking of batting
-			cur_score = int(batter['h']) + int(batter['rbi']) + BATTING_HOMERUN_MULTIPLIER*int(batter['hr']) + BATTING_BB_MULTIPLIER*int(batter['bb'])
+					#arbitrary ranking of batting
+					cur_score = int(batter['h']) + int(batter['rbi']) + BATTING_HOMERUN_MULTIPLIER*int(batter['hr']) + BATTING_BB_MULTIPLIER*int(batter['bb'])
 
-			cur_score = cur_score * mvp_multiplier
+					cur_score = cur_score * mvp_multiplier
 
-			if cur_score > mvp_score:
-				mvp_score = cur_score
-				mvp = batter['name']
+					if cur_score > mvp_score:
+						mvp_score = cur_score
+						mvp = batter['name']
 
 		mvp_batter_text = "%s hit well." % (mvp)
 		return (MVP_BATTER_VALUE, mvp_batter_text)
