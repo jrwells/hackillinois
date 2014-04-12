@@ -1,3 +1,5 @@
+import random
+
 # interest thresholds
 ERROR_INTEREST_THRESHOLD = 3
 GRAND_SLAM_RUNNER_COUNT = 3
@@ -15,6 +17,13 @@ BATTING_HOMERUN_MULTIPLIER = 0.4
 BATTING_BB_MULTIPLIER = .01
 BATTING_RBI_MULTIPLIER = 7.0
 
+# action verbs
+DEFEATED_STRONG = ['%s destroyed %s','%s trounced %s','%s eviscerated %s','%s gave %s what for']
+DEFEATED_NORMAL = ['%s defeated %s']
+DEFEATED_NARROW = ['%s narrowly beat %s']
+
+STRONG_THRESHOLD = 4
+NARROW_THRESHOLD = 1
 
 class Summarize:
 	@staticmethod
@@ -22,14 +31,14 @@ class Summarize:
 		runs_scored = game_data['linescore']['r']
 		if int(runs_scored['home']) > int(runs_scored['away']):
 			winner = game_data['home_team_name']
-			winner_score = runs_scored['home']
+			winner_score = int(runs_scored['home'])
 			loser = game_data['away_team_name']
-			loser_score = runs_scored['away']
+			loser_score = int(runs_scored['away'])
 		else:
 			winner = game_data['away_team_name']
-			winner_score = runs_scored['away']
+			winner_score = int(runs_scored['away'])
 			loser = game_data['home_team_name']
-			loser_score = runs_scored['home']
+			loser_score = int(runs_scored['home'])
 
 		# check for extra innings
 		inning_count = int(game_data['status']['inning'])
@@ -37,7 +46,16 @@ class Summarize:
 		if inning_count > NORMAL_INNING_COUNT:
 			extra_innings = " in %d" % inning_count
 
-		return "%s defeated %s %s - %s%s." % (winner, loser, winner_score, loser_score, extra_innings)
+		# pick an action verb
+		if winner_score - loser_score <= NARROW_THRESHOLD:
+			defeat_string = random.choice(DEFEATED_NARROW) % (winner, loser)
+		elif winner_score - loser_score <= STRONG_THRESHOLD:
+			defeat_string = random.choice(DEFEATED_NORMAL) % (winner, loser)
+		else:
+			defeat_string = random.choice(DEFEATED_STRONG) % (winner, loser)
+
+
+		return "%s %d - %d%s. " % (defeat_string, winner_score, loser_score, extra_innings)
 
 	@staticmethod
 	def get_errors(game_data):

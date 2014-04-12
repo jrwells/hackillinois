@@ -31,7 +31,7 @@ if($result = $db->query($remainingQuery)) {
 }
 
 // funtimes
-$houses = ['Funhouse', 'Secret Cove', 'Housebus', 'Candy Van', 'Touching Game', 'Lap'];
+$houses = ['Funhouse', 'Secret Cove', 'Housebus', 'Candy Van', 'Touching Game', 'Lap', 'Magical Dungeon'];
 $house = $houses[array_rand($houses, 1)];
 ?><!doctype html>
 <html lang="en">
