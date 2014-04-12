@@ -116,25 +116,21 @@ class Metrics:
 
 		change_count = 0
 		away_score, home_score = 0, 0
-		away_winning, home_winning = False, False
+		leader = None
 		for i in game_data['linescore']['inning']:
 
 			away_score += int(i['away'])
+
+			if away_score > home_score and leader != "away":
+				leader = "away"
+				change_count += 1
+
 			if 'home' in i:
 				home_score += int(i['home'])
 
-			if (away_score > home_score) and not away_winning:
-				away_winning = True
-				home_winning = False
+			if home_score > away_score and leader != "home":
+				leader = "home"
 				change_count += 1
-
-			elif (home_score > away_score) and not home_winning:
-				home_winning = True
-				away_winning = False
-				change_count += 1
-
-			else:
-				home_winning, away_winning = False, False
 
 		return change_count
 
