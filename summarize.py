@@ -193,7 +193,7 @@ class Summarize:
 				for pitcher in pitchers:
 					if 'win' in pitcher.keys() and pitcher['win'] == 'true':
 						multiple_ks = ''
-						if int(pitchers['so']) > 1:
+						if int(pitcher['so']) > 1:
 							multiple_ks = 's'
 						return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA" % (pitcher['name'], pitcher['so'], multiple_ks, pitcher['era']))
 		return (DO_NOT_MENTION_VALUE, "")
