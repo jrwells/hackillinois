@@ -107,7 +107,7 @@ class Summarize:
 							else:
 								no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['home_sname']
 			if len(no_hitter_text) > 0:
-				no_hitter_text += " had no hitter."
+				no_hitter_text += " had no a hitter."
 				return (NO_HITTER_VALUE, no_hitter_text)
 			else:
 				return (DO_NOT_MENTION_VALUE, no_hitter_text)
