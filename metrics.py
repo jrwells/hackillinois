@@ -1,3 +1,6 @@
+#Arbitrary Constants
+RBI_THRESHOLD_PERCENT = .33
+
 class Metrics:
 	@staticmethod
 	def InningRunsTotalRuns(game_data):
@@ -30,13 +33,12 @@ class Metrics:
 	@staticmethod
 	def PitchingChangeDistribution(game_data):
 
-	# Returns a tuple (Away,Home) of the average difference between players season
-	# batting average and their batting average in the current game
+
 	@staticmethod
 	def GameBattingAvgVsSeason(game_data):
 		""" Returns a tuple (Away,Home) of the average difference between players season
 		    batting average and their batting average in the current game """
-		    
+
 		boxscore = game_data['boxscore']
 		#index for team
 		team_index = 1
@@ -67,3 +69,25 @@ class Metrics:
 
 	@staticmethod
 	def RBIDistribution(game_data):
+		""" Returns a list of players for each team with a percentage of RBIs for their team
+			over RBI_THRESHOLD_PERCENT. Returns a tuple of lists of tuples: 
+			([(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)],[(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)]) """
+
+		boxscore = game_data['boxscore']
+		# index for team
+		team_index = 1
+		# Away @ Home
+		rbi_players = ([], [])
+		for team in boxscore['batting']:
+			# The threshold determined by RBI_THRESHOLD_PERCENT
+			rbi_threshold = float(team['rbi']) * RBI_THRESHOLD_PERCENT
+			for batter in team['batter']:
+				batter_rbi = int(batter['rbi'])
+				# if the batter rbi is high enough, create a tuple ( <LAST NAME>, <RBIs> ) and add it to the list
+				if batter_rbi >= rbi_threshold:
+					rbi_players[team_index].append( (batter['name_display_first_last'].split(' ')[-1], batter_rbi) )
+			# Change the team index
+			team_index = 0
+
+		return rbi_players
+
