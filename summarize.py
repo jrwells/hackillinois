@@ -1,6 +1,7 @@
 # interest thresholds
 ERROR_INTEREST_THRESHOLD = 3
 GRAND_SLAM_RUNNER_COUNT = 3
+NORMAL_INNING_COUNT = 9
 
 # score values
 DO_NOT_MENTION_VALUE = 0
@@ -29,7 +30,13 @@ class Summarize:
 			loser = game_data['home_team_name']
 			loser_score = runs_scored['home']
 
-		return "%s defeated %s %s - %s. " % (winner, loser, winner_score, loser_score)
+		# check for extra innings
+		inning_count = int(game_data['status']['inning'])
+		extra_innings = ""
+		if inning_count > NORMAL_INNING_COUNT:
+			extra_innings = " in %d" % inning_count
+
+		return "%s defeated %s %s - %s%s. " % (winner, loser, winner_score, loser_score, extra_innings)
 
 	@staticmethod
 	def get_errors(game_data):
@@ -150,6 +157,7 @@ class Summarize:
 		boxscore = game_data['boxscore']
 		mvp = None
 		mvp_score = 0
+		mvp_tit_for_tat = None
 
 		for team in boxscore['batting']:
 			for batter in team['batter']:
@@ -166,8 +174,9 @@ class Summarize:
 					if cur_score > mvp_score:
 						mvp_score = cur_score
 						mvp = batter['name_display_first_last'].split(' ')[1]
+						mvp_tit_for_tat = (batter['h'], batter['ab'])
 
-		mvp_batter_text = "%s hit well." % (mvp)
+		mvp_batter_text = "%s went %s for %s." % (mvp, mvp_tit_for_tat[0], mvp_tit_for_tat[1])
 		return (MVP_BATTER_VALUE, mvp_batter_text)
 
 	@staticmethod
