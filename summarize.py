@@ -103,7 +103,7 @@ class Summarize:
 					pitchers = team['pitcher']
 					if type(pitchers) is not list:
 						if len(no_hitter_text) == 0:
-							no_hitter_text = pitchers['name_display_first_last'].partition(' ')[0]
+							no_hitter_text = pitchers['name_display_first_last'].partition(' ')[1]
 						else:
 							no_hitter_text = no_hitter_text + " and " + pitchers['name']
 					else:
@@ -133,7 +133,7 @@ class Summarize:
 						if int(team_batting['h']) == 0 and int(team_batting['lob']) == 0 and int(team_batting['r']) == 0:
 							pitchers = team_pitching['pitcher']
 							if type(pitchers) is not list:
-								perfect_game_text = pitchers['name_display_first_last'].partition(' ')[0]
+								perfect_game_text = pitchers['name_display_first_last'].partition(' ')[1]
 							else:
 								if team_pitching['team_flag'] == 'away':
 									perfect_game_text = game_data['boxscore']['away_fname']
