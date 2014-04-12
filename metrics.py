@@ -8,21 +8,18 @@ class Metrics:
 	def InningRunsTotalRuns(game_data):
 		""" Gets the innings where the most proportion of runs """
 
-		boxscore = game_data['boxscore']
-		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = boxscore['linescore'], float(boxscore['linescore']['home_team_runs']), float(boxscore['linescore']['away_team_runs']), [], []
+		linescore = game_data['boxscore']['linescore']
+		home_runs, away_runs, home_inning_runs, away_inning_runs = float(linescore['home_team_runs']), float(linescore['away_team_runs']), [], []
 
 		for inning in linescore['inning_line_score']:
 			for key in inning.keys():
 				if key == 'home':
-					try:
+					if inning[key] = 'x':
+						home_inning_runs.append(0.0)
+					else:
 						home_inning_runs.append(float(inning[key])/home_runs)
-					except:
-						home_inning_runs.append(0)
 				elif key == 'away':
-					try:
-						away_inning_runs.append(float(inning[key])/away_runs)
-					except:
-						away_inning_runs.append(0)
+					away_inning_runs.append(float(inning[key])/away_runs)
 
 		away_max, home_max = max(away_inning_runs), max(home_inning_runs)
 		away_tuple, home_tuple = (away_max, away_inning_runs.index(away_max)), (home_max, home_inning_runs.index(home_max))
