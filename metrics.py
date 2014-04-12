@@ -34,6 +34,9 @@ class Metrics:
 	# batting average and their batting average in the current game
 	@staticmethod
 	def GameBattingAvgVsSeason(game_data):
+		""" Returns a tuple (Away,Home) of the average difference between players season
+		    batting average and their batting average in the current game """
+		    
 		boxscore = game_data['boxscore']
 		#index for team
 		team_index = 1
