@@ -10,10 +10,14 @@ class Metrics:
 
 		linescore = game_data['boxscore']['linescore']
 		home_runs, away_runs, home_inning_runs, away_inning_runs = float(linescore['home_team_runs']), float(linescore['away_team_runs']), [], []
+		if home_runs == 0:
+			home_runs = 1
+		if away_runs == 0:
+			away_runs = 1
 
 		for inning in linescore['inning_line_score']:
 			if inning['home'] == 'x':
-				home_inning_runs.append(0)
+				home_inning_runs.append(0.0)
 			else:
 				home_inning_runs.append(float(inning['home'])/home_runs)
 			away_inning_runs.append(float(inning['away'])/away_runs)
