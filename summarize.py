@@ -1,4 +1,3 @@
-
 class summarize:
 	
 	def get_winner(gameData):
