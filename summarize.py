@@ -154,12 +154,12 @@ class Summarize:
 
 		for team in boxscore['batting']:
 			for batter in team['batter']:
-				#Compare this game's performance to their batting average for the season
-				#Used as a multiplier for mvp_score
+				# compare this game's performance to their batting average for the season
+				# used as a multiplier for mvp_score
 				if float(batter['ab']) > 0 and float(batter['avg']) > 0:
 					mvp_multiplier = (float(batter['h']) / float(batter['ab']) ) / float(batter['avg'])
 
-					#arbitrary ranking of batting
+					# arbitrary ranking of batting
 					cur_score = int(batter['h']) + int(batter['rbi']) + BATTING_HOMERUN_MULTIPLIER*int(batter['hr']) + BATTING_BB_MULTIPLIER*int(batter['bb'])
 
 					cur_score = cur_score * mvp_multiplier
