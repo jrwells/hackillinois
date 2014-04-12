@@ -53,12 +53,21 @@ class Summarize:
 	def get_home_runs(game_data):
 		home_run_summary_text = None
 
+		if 'home_runs' not in game_data:
+			return (DO_NOT_MENTION_VALUE, "")
+
 		# check for grand slams
 		game_home_runs = game_data['home_runs']['player']
 
+		# make into list if not
+		try:
+			var = game_home_runs[0]['runners']
+		except:
+			game_home_runs = [game_home_runs]
+
 		for hr in game_home_runs:
-			if hr['runners'] == GRAND_SLAM_RUNNER_COUNT:
-				home_run_summary_text = hr['last'] + " hit grand slam."
+			if int(hr['runners']) == GRAND_SLAM_RUNNER_COUNT:
+				home_run_summary_text = hr['last'] + " hit a grand slam."
 				return (6, home_run_summary_text)
 
 		# report player home runs
@@ -69,39 +78,36 @@ class Summarize:
 				max_hr = hr['runners']
 				max_hr_name = hr['last']
 
-		home_run_summary_text = max_hr_name + " hit home run."
-		return (4, home_run_summary_text)
+		rbi = int(max_hr) + 1
 
-	def fetch_boxscore(game_data):
-		root_dir = game_data['game_data_directory'] + '/boxscore.json'
-		boxscore = requests.get(root_dir).json()
-		self.boxscore = boxscore['data']['boxscore']
+		home_run_summary_text = max_hr_name + " hit a %d shot home run." % rbi
+		return (rbi, home_run_summary_text)
 
 	@staticmethod
 	def get_no_hitter(game_data):
 		no_hitter_text = ""
-		if self.boxscore:
-			for team in self.boxscore['pitching']:
+		if game_data['boxscore']:
+			for team in game_data['boxscore']['pitching']:
 				if int(team['h']) == 0:
 					pitchers = team['pitcher']
 					if len(pitchers) == 1:
 						if len(no_hitter_text) == 0:
 							no_hitter_text = pitchers[0]['name']
 						else:
-							no_hitter_text = no_hitter_text + " and " pitchers[0]['name']
+							no_hitter_text = no_hitter_text + " and " + pitchers[0]['name']
 					else:
 						if len(no_hitter_text) == 0:
 							if team['team_flag'] == 'away':
-								no_hitter_text = self.boxscore['away_fname']
+								no_hitter_text = game_data['boxscore']['away_fname']
 							else:
-								no_hitter_text = self.boxscore['home_sname']
+								no_hitter_text = game_data['boxscore']['home_sname']
 						else:
 							if team['team_flag'] == 'away':
-								no_hitter_text = no_hitter_text + " and " + self.boxscore['away_fname']
+								no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['away_fname']
 							else:
-								no_hitter_text = no_hitter_text + " and " + self.boxscore['home_sname']
+								no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['home_sname']
 			if len(no_hitter_text) > 0:
 				no_hitter_text += " had no hitter."
-				return (NO_HITTER_VALUE, no_hitter_text
-			else
+				return (NO_HITTER_VALUE, no_hitter_text)
+			else:
 				return (DO_NOT_MENTION_VALUE, no_hitter_text)

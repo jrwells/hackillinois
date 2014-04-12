@@ -33,7 +33,8 @@ def generateSummary(gameData):
 	blurbs.sort()
 
 	for i in range(0, 3):
-		summary = summary + blurbs[i][1]
+		if blurbs[i][0] > 0:
+			summary = summary + blurbs[i][1]
 
 	return summary
 
@@ -65,6 +66,11 @@ if queue:
 	for record in master_scoreboard['data']['games']['game']:
 		if record['id'] in queue:
 			if record['status']['status'] == "Final":
+				# fetch boxscore and coalesce
+				root_dir = "http://gd2.mlb.com" + record['game_data_directory'] + '/boxscore.json'
+				boxscore = requests.get(root_dir).json()['data']['boxscore']
+				record['boxscore'] = boxscore
+
 				summary = generateSummary(record)
 				teaserText = generateTeaserText(record)
 
