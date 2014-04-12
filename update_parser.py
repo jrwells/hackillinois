@@ -68,7 +68,7 @@ def generateSummary(gameData):
 	#RBI percentage
 	#summary += '<br> RBI Percentage: %s' % (str(Metrics.RBIDistribution(gameData)))
 
-	print summary
+	# print summary
 
 	return summary
 
