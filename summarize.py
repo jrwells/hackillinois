@@ -11,6 +11,7 @@ PERFECT_GAME_VALUE = 10
 # arbitrary ranking constants
 BATTING_HOMERUN_MULTIPLIER = 0.4
 BATTING_BB_MULTIPLIER = .01
+BATTING_RBI_MULTIPLIER = 7.0
 
 
 class Summarize:
@@ -152,6 +153,8 @@ class Summarize:
 		mvp = None
 		mvp_score = 0
 		mvp_tit_for_tat = None
+		rbis = None
+		total_runs = int(game_data['linescore']['r']['home']) + int(game_data['linescore']['r']['away'])
 
 		for team in boxscore['batting']:
 			for batter in team['batter']:
@@ -161,7 +164,10 @@ class Summarize:
 					mvp_multiplier = (float(batter['h']) / float(batter['ab']) ) / float(batter['avg'])
 
 					# arbitrary ranking of batting
-					cur_score = int(batter['h']) + int(batter['rbi']) + BATTING_HOMERUN_MULTIPLIER*int(batter['hr']) + BATTING_BB_MULTIPLIER*int(batter['bb'])
+					rbi_score = 0
+					if int(batter['rbi']) > 0:
+						rbi_score = BATTING_RBI_MULTIPLIER*(max(.33,float(batter['rbi'])/total_runs))
+					cur_score = int(batter['h']) + rbi_score + BATTING_HOMERUN_MULTIPLIER*int(batter['hr']) + BATTING_BB_MULTIPLIER*int(batter['bb'])
 
 					cur_score = cur_score * mvp_multiplier
 
@@ -169,7 +175,11 @@ class Summarize:
 						mvp_score = cur_score
 						mvp = batter['name_display_first_last'].split(' ')[1]
 						mvp_tit_for_tat = (batter['h'], batter['ab'])
-
+						rbis = int(batter['rbi'])
 		mvp_batter_text = "%s went %s for %s." % (mvp, mvp_tit_for_tat[0], mvp_tit_for_tat[1])
+		if rbis > 0:
+			mvp_batter_text = mvp_batter_text[:-1] + " with %s RBIs." % (rbis)
+			if rbis < 2:
+				mvp_batter_text = mvp_batter_text[:-2] + "."
 		return (MVP_BATTER_VALUE, mvp_batter_text)
 
