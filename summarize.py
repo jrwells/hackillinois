@@ -184,11 +184,17 @@ class Summarize:
 		for team in game_data['boxscore']['pitching']:
 			pitchers = team['pitcher']
 			if type(pitchers) is not list:
-				if 'win' in pitchers.keys() and pitchers['win'] == True:
-					return (WINNING_PITCHER_VALUE, "%s %s K %s ERA" % (pitchers['name'], pitchers['so'], pitchers['era']))
+				if 'win' in pitchers.keys() and pitchers['win'] == 'true':
+					multiple_ks = ''
+					if int(pitchers['so']) > 1:
+						multiple_ks = 's'
+					return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA" % (pitchers['name'], pitchers['so'], multiple_ks, pitchers['era']))
 			else:
 				for pitcher in pitchers:
-					if 'win' in pitcher.keys() and pitcher['win'] == True:
-						return (WINNING_PITCHER_VALUE, "%s %s K %s ERA" % (pitchers['name'], pitchers['so'], pitchers['era']))
+					if 'win' in pitcher.keys() and pitcher['win'] == 'true':
+						multiple_ks = ''
+						if int(pitcher['so']) > 1:
+							multiple_ks = 's'
+						return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA" % (pitcher['name'], pitcher['so'], multiple_ks, pitcher['era']))
 		return (DO_NOT_MENTION_VALUE, "")
 
