@@ -13,7 +13,7 @@ class Metrics:
 
 		for inning in linescore['inning_line_score']:
 			if inning['home'] == 'x':
-				home_inning_runs.[inning['inning'] - 1]
+				home_inning_runs[inning['inning'] - 1] = 0
 			else:
 				home_inning_runs[inning['inning'] - 1] = (float(inning['home'])/home_runs
 			away_inning_runs[inning['inning'] - 1] = float(inning['away'])/away_runs
