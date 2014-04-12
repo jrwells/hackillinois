@@ -37,6 +37,7 @@ class Metrics:
 	@staticmethod
 	def GetEventLog(game_data):
 		""" Return the XML event log for a game as a string """
+
 		eventlog_url = "http://gd2.mlb.com" + game_data['game_data_directory'] + "/eventLog.xml"
 		return urllib2.urlopen(eventlog_url).read()
 
