@@ -14,7 +14,7 @@ class Metrics:
 		for inning in linescore['inning_line_score']:
 			for key in inning.keys():
 				if key == 'home':
-					if inning[key] = 'x':
+					if inning[key] == 'x':
 						home_inning_runs.append(0.0)
 					else:
 						home_inning_runs.append(float(inning[key])/home_runs)
