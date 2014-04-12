@@ -6,7 +6,7 @@ RBI_THRESHOLD_PERCENT = .33
 class Metrics:
 	@staticmethod
 	def InningRunsTotalRuns(game_data):
-		""" Gets the innings where the most proportion of runs """
+		""" Gets the innings for each team which has the most proportion of runs """
 
 		linescore = game_data['boxscore']['linescore']
 		home_runs, away_runs, home_inning_runs, away_inning_runs = float(linescore['home_team_runs']), float(linescore['away_team_runs']), [], []
