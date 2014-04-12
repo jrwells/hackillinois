@@ -138,7 +138,7 @@ class Metrics:
 	def RBIDistribution(game_data):
 		""" Returns a list of players for each team with a percentage of RBIs for their team
 			over RBI_THRESHOLD_PERCENT. Returns a tuple of lists of tuples:
-			([(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)],[(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)]) """
+			([(<LAST NAME>, <RBIs>, <RBI_PERCENTAGE>), ... etc) """
 
 		boxscore = game_data['boxscore']
 		# index for team
@@ -152,7 +152,8 @@ class Metrics:
 				batter_rbi = int(batter['rbi'])
 				# if the batter rbi is high enough, create a tuple ( <LAST NAME>, <RBIs> ) and add it to the list
 				if batter_rbi >= rbi_threshold:
-					rbi_players[team_index].append( (batter['name_display_first_last'].split(' ')[-1], batter_rbi) )
+					rbi_percent = float(team['rbi']) / float(team['rbi'])
+					rbi_players[team_index].append( (batter['name_display_first_last'].split(' ')[-1], batter_rbi, rbi_percent) )
 			# Change the team index
 			team_index = 0
 
