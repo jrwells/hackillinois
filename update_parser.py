@@ -14,11 +14,26 @@ def getUnfinishedGames():
 
 
 def generateSummary(gameData):
+	# start with who won and the score
 	summary = Summarize.get_winner(gameData)
-	error_summary = Summarize.get_errors(gameData)
 
-	if error_summary[1]:
-		summary = summary + error_summary[1]
+	blurbs = []
+
+	# notable things - no hitters, perfect games, etc.
+	blurbs.append(Summarize.get_no_hitter(gameData))
+
+	# grand slams and home runs
+	blurbs.append(Summarize.get_home_runs(gameData))
+
+	# errors
+	blurbs.append(Summarize.get_errors(gameData))
+
+
+	# get top 3 blurbs
+	blurbs.sort()
+
+	for i in range(0, 3):
+		summary = summary + blurbs[i][1]
 
 	return summary
 
