@@ -138,7 +138,7 @@ class Metrics:
 	@staticmethod
 	def RBIDistribution(game_data):
 		""" Returns a list of players for each team with a percentage of RBIs for their team
-			over RBI_THRESHOLD_PERCENT. Returns a tuple of lists of tuples: 
+			over RBI_THRESHOLD_PERCENT. Returns a tuple of lists of tuples:
 			([(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)],[(<LAST NAME>, <RBIs>), (<LAST NAME>, <RBIs>)]) """
 
 		boxscore = game_data['boxscore']
