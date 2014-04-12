@@ -1,11 +1,7 @@
 ERROR_INTEREST_THRESHOLD = 3
-
-class summarize:
-	def get_winner(gameData):
-		runs_scored = gameData['linescore']['r']
+ROOT = "/components/game/mlb/year_2013/month_08/day_21/"
 
 class Summarize:
-
 	@staticmethod
 	def get_winner(game_data):
 		runs_scored = game_data['linescore']['r']
@@ -34,7 +30,6 @@ class Summarize:
 			if error_summary_text:
 				error_summary_text = error_summary_text + " and "
 				end = ""
-
 			else:
 				error_summary_text = ""
 				end = " errors"
@@ -44,7 +39,6 @@ class Summarize:
 		if error_summary_text:
 			score = max(int(error_count['home']), int(error_count['away']))
 			error_summary_text = error_summary_text + "."
-
 		else:
 			score = 0
 
