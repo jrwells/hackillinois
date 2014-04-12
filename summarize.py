@@ -36,7 +36,7 @@ class Summarize:
 		if inning_count > NORMAL_INNING_COUNT:
 			extra_innings = " in %d" % inning_count
 
-		return "%s defeated %s %s - %s%s. " % (winner, loser, winner_score, loser_score, extra_innings)
+		return "%s defeated %s %s - %s%s." % (winner, loser, winner_score, loser_score, extra_innings)
 
 	@staticmethod
 	def get_errors(game_data):
@@ -191,4 +191,4 @@ class Summarize:
 					if 'win' in pitcher.keys() and pitcher['win'] == True:
 						return (WINNING_PITCHER_VALUE, "%s %s K %s ERA" % (pitchers['name'], pitchers['so'], pitchers['era']))
 		return (DO_NOT_MENTION_VALUE, "")
-				
+

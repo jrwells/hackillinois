@@ -23,7 +23,7 @@ if($result = $db->query($listQuery)) {
 	}
 }
 
-$remainingQuery = 'SELECT COUNT(1) FROM `games` WHERE `finished` = 0;';
+$remainingQuery = 'SELECT COUNT(1) FROM `games` WHERE `start_time` > DATE_SUB(NOW(), INTERVAL 3 HOUR) AND `finished` = 0;';
 if($result = $db->query($remainingQuery)) {
 	$row = $result->fetch_row();
 	$s = ($row[0] == 1) ? '' : 's';

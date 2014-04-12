@@ -47,7 +47,7 @@ def generateSummary(gameData):
 
 	for i in range(0, len(blurbs)):
 		if blurbs[i][0] > 0:
-			summary = summary + ' {' + str(blurbs[i][0]) + '} ' + blurbs[i][1]
+			summary = summary + " " + blurbs[i][1]
 
 	return summary
 
