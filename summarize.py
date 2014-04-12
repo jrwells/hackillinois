@@ -188,13 +188,13 @@ class Summarize:
 					multiple_ks = ''
 					if int(pitchers['so']) > 1:
 						multiple_ks = 's'
-					return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA." % (pitchers['name_display_first_last'].split(' ')[1], pitchers['so'], multiple_ks, pitchers['era']))
+					return (WINNING_PITCHER_VALUE, "WP, %s had %s K%s with a %s ERA." % (pitchers['name_display_first_last'].split(' ')[1], pitchers['so'], multiple_ks, pitchers['era']))
 			else:
 				for pitcher in pitchers:
 					if 'win' in pitcher.keys() and pitcher['win'] == 'true':
 						multiple_ks = ''
 						if int(pitcher['so']) > 1:
 							multiple_ks = 's'
-						return (WINNING_PITCHER_VALUE, "%s %s K%s %s ERA." % (pitcher['name_display_first_last'].split(' ')[1], pitcher['so'], multiple_ks, pitcher['era']))
+						return (WINNING_PITCHER_VALUE, "WP, %s had %s K%s with a %s ERA." % (pitcher['name_display_first_last'].split(' ')[1], pitcher['so'], multiple_ks, pitcher['era']))
 		return (DO_NOT_MENTION_VALUE, "")
 
