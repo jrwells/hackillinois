@@ -126,7 +126,7 @@ class Summarize:
 			for team_pitching in game_data['boxscore']['pitching']:
 				for team_batting in game_data['boxscore']['batting']:
 					if team_pitching['team_flag'] != team_batting['team_flag']:
-						if team_batting['h'] == 0 && team_batting['lob'] == 0 && team_batting['r'] == 0:
+						if team_batting['h'] == 0 and team_batting['lob'] == 0 and team_batting['r'] == 0:
 							pitchers = team_pitching['pitcher']
 							if len(pitchers) == 1:
 								perfect_game_text = pitchers[0]['name']
