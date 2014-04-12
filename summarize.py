@@ -60,9 +60,9 @@ class Summarize:
 					pitchers = team['pitcher']
 					if len(pitchers) == 1:
 						if len(no_hitter_text) == 0:
-							no_hitter_text = pitchers[0]['name_display_first_last']
+							no_hitter_text = pitchers[0]['name']
 						else:
-							no_hitter_text = no_hitter_text + " and " pitchers[0]['name_display_first_last']
+							no_hitter_text = no_hitter_text + " and " pitchers[0]['name']
 					else:
 						if len(no_hitter_text):
 							if team['team_flag'] == 'away':
