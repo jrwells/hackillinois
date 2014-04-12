@@ -1,6 +1,7 @@
 # interest thresholds
 ERROR_INTEREST_THRESHOLD = 3
 GRAND_SLAM_RUNNER_COUNT = 3
+NORMAL_INNING_COUNT = 9
 
 # score values
 DO_NOT_MENTION_VALUE = 0
@@ -28,7 +29,13 @@ class Summarize:
 			loser = game_data['home_team_name']
 			loser_score = runs_scored['home']
 
-		return "%s defeated %s %s - %s. " % (winner, loser, winner_score, loser_score)
+		# check for extra innings
+		inning_count = int(game_data['status']['inning'])
+		extra_innings = ""
+		if inning_count > NORMAL_INNING_COUNT:
+			extra_innings = " in %d" % inning_count
+
+		return "%s defeated %s %s - %s%s. " % (winner, loser, winner_score, loser_score, extra_innings)
 
 	@staticmethod
 	def get_errors(game_data):
