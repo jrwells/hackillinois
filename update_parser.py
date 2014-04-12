@@ -41,6 +41,7 @@ def generateSummary(gameData):
 
 	# get top 3 blurbs
 	blurbs.sort()
+	blurbs.reverse()
 
 	for i in range(0, len(blurbs)):
 		if blurbs[i][0] > 0:
