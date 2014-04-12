@@ -132,8 +132,8 @@ class Summarize:
 					if team_pitching['team_flag'] != team_batting['team_flag']:
 						if int(team_batting['h']) == 0 and int(team_batting['lob']) == 0 and int(team_batting['r']) == 0:
 							pitchers = team_pitching['pitcher']
-							if len(pitchers) == 1:
-								perfect_game_text = pitchers[0]['name']
+							if type(pitchers) is not list:
+								perfect_game_text = pitchers['name']
 							else:
 								if team_pitching['team_flag'] == 'away':
 									perfect_game_text = game_data['boxscore']['away_fname']
