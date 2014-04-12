@@ -87,7 +87,11 @@ class Summarize:
 
 		rbi = int(max_hr) + 1
 
-		home_run_summary_text = max_hr_name + " hit a %d shot home run." % rbi
+		if rbi > 1:
+			rbi_text = "%d shot" % rbi
+		else:
+			rbi_text = "solo"
+		home_run_summary_text = max_hr_name + " hit a %s home run." % rbi_text
 		return (rbi, home_run_summary_text)
 
 	@staticmethod

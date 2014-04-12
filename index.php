@@ -23,6 +23,13 @@ if($result = $db->query($listQuery)) {
 	}
 }
 
+$remainingQuery = 'SELECT COUNT(1) FROM `games` WHERE `finished` = 0;';
+if($result = $db->query($remainingQuery)) {
+	$row = $result->fetch_row();
+	$s = ($row[0] == 1) ? '' : 's';
+	$feed .= '<h1 class="moregames"><small>' . $row[0] . ' more game' . $s . ' today.</small></h1>';
+}
+
 // funtimes
 $houses = ['Funhouse', 'Secret Cove', 'Housebus', 'Candy Van', 'Touching Game', 'Lap'];
 $house = $houses[array_rand($houses, 1)];
@@ -33,6 +40,11 @@ $house = $houses[array_rand($houses, 1)];
 	<style type="text/css">
 	body {
 		padding-top: 10%;
+	}
+
+	.moregames {
+		text-align: center;
+		margin-bottom: 5%;
 	}
 	</style>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
