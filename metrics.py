@@ -68,7 +68,7 @@ class Metrics:
 				# check for pitching change
 				if "Pitching Change" in event.get("description"):
 					# update home or away accordingly
-					if team.get("home_team") == "false":
+					if team.get("home_team") == "true":
 						# set first if not yet set
 						if first_away == None:
 							first_away = int(event.get("inning"))
