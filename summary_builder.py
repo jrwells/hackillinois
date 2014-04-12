@@ -21,5 +21,11 @@ class SummaryBuilder:
     (team_won: did this team win - True or False
         if None, this event doesn't correspond to a team.)
   """
-  def add_event(description,type,weight,team_won=None):
+  def add_event(self, description,type,weight,team_won=None):
+    pass
+
+  """
+  Build a summary for this game.
+  """
+  def build_summary(self):
     pass
