@@ -6,10 +6,12 @@ GRAND_SLAM_RUNNER_COUNT = 3
 DO_NOT_MENTION_VALUE = 0
 NO_HITTER_VALUE = 10
 MVP_BATTER_VALUE = 2
+PERFECT_GAME_VALUE = 10
 
 #arbitrary ranking constants
 BATTING_HOMERUN_MULTIPLIER = 0.4
 BATTING_BB_MULTIPLIER = .01
+
 
 class Summarize:
 	@staticmethod
@@ -112,10 +114,33 @@ class Summarize:
 							else:
 								no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['home_sname']
 			if len(no_hitter_text) > 0:
-				no_hitter_text += " had no a hitter."
+				no_hitter_text += " pitched no a hitter."
 				return (NO_HITTER_VALUE, no_hitter_text)
 			else:
 				return (DO_NOT_MENTION_VALUE, no_hitter_text)
+
+
+	def get_perfect_game(game_data):
+		perfect_game_text = ""
+		if game_data['boxscore']:
+			for team_pitching in game_data['boxscore']['pitching']:
+				for team_batting in game_data['boxscore']['batting']:
+					if team_pitching['team_flag'] != team_batting['team_flag']:
+						if team_batting['h'] == 0 && team_batting['lob'] == 0 && team_batting['r'] == 0:
+							pitchers = team_pitching['pitcher']
+							if len(pitchers) == 1:
+								perfect_game_text = pitchers[0]['name']
+							else:
+								if team_pitching['team_flag'] == 'away':
+									perfect_game_text = game_data['boxscore']['away_fname']
+								else:
+									perfect_game_text = game_data['boxscore']['home_sname']
+		if len(perfect_game_text) > 0:
+			perfect_game_text += " pitched a perfect game!"
+			return (PERFECT_GAME_VALUE, perfect_game_text)
+		else:
+			return (DO_NOT_MENTION_VALUE, perfect_game_text)
+
 
 	@staticmethod
 	def get_mvp_batter(game_data):
@@ -138,11 +163,4 @@ class Summarize:
 
 		mvp_batter_text = "%s hit well." % (mvp)
 		return (MVP_BATTER_VALUE, mvp_batter_text)
-
-
-
-
-
-
-
 
