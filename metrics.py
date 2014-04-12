@@ -1,8 +1,8 @@
 class Metrics:
 	@staticmethod
 	def InningRunsTotalRuns(game_data):
-		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = game_data['boxscore']['linescore'], 
-			float(game_data['boxscore']['home_team_runs']), float(game_data['boxscore']['away_team_runs']), [], []
+		boxscore = game_data['boxscore']
+		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = boxscore['linescore'], float(boxscore['home_team_runs']), float(boxscore['away_team_runs']), [], []
 		for inning in linescore['inning_line_score']:
 			for key in inning.keys():
 				if key == 'home':
