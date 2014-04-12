@@ -84,7 +84,7 @@ class Metrics:
 			"first_sub_away" : first_away,
 			"total_subs_away" : total_away,
 			"first_sub_home" : first_home,
-			"total_subs_home" : total_home,
+			"total_subs_home" : total_home
 		}
 
 		return result
