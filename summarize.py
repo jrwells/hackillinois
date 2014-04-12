@@ -119,14 +119,14 @@ class Summarize:
 			else:
 				return (DO_NOT_MENTION_VALUE, no_hitter_text)
 
-
+	@staticmethod
 	def get_perfect_game(game_data):
 		perfect_game_text = ""
 		if game_data['boxscore']:
 			for team_pitching in game_data['boxscore']['pitching']:
 				for team_batting in game_data['boxscore']['batting']:
 					if team_pitching['team_flag'] != team_batting['team_flag']:
-						if team_batting['h'] == 0 and team_batting['lob'] == 0 and team_batting['r'] == 0:
+						if int(team_batting['h']) == 0 and int(team_batting['lob']) == 0 and int(team_batting['r']) == 0:
 							pitchers = team_pitching['pitcher']
 							if len(pitchers) == 1:
 								perfect_game_text = pitchers[0]['name']
