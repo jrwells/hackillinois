@@ -1,4 +1,4 @@
-import datetime, json, requests, MySQLdb
+import datetime, json, urllib2, MySQLdb
 from summarize import *
 
 # return a list of game IDs for games that aren't finished
@@ -59,7 +59,7 @@ url = '%syear_%s/month_%02d/day_%02d/master_scoreboard.json' % (root, year, int(
 queue = getUnfinishedGames()
 
 if queue:
-	# master_scoreboard = requests.get(url).json()
+	# master_scoreboard = json.load(urllib2.urlopen(url))
 	master_scoreboard = json.load(open("master_scoreboard.json"))
 	loops = 0
 
@@ -68,7 +68,7 @@ if queue:
 			if record['status']['status'] == "Final":
 				# fetch boxscore and coalesce
 				root_dir = "http://gd2.mlb.com" + record['game_data_directory'] + '/boxscore.json'
-				boxscore = requests.get(root_dir).json()['data']['boxscore']
+				boxscore = json.load(urllib2.urlopen(root_dir))['data']['boxscore']
 				record['boxscore'] = boxscore
 
 				summary = generateSummary(record)

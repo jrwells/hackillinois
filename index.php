@@ -22,10 +22,14 @@ if($result = $db->query($listQuery)) {
 		$feed .= '<h2>' . $row['full_summary'] . '</h2><br />';
 	}
 }
+
+// funtimes
+$houses = ['Funhouse', 'Secret Cove', 'Housebus', 'Candy Van', 'Touching Game', 'Lap'];
+$house = $houses[array_rand($houses, 1)];
 ?><!doctype html>
 <html lang="en">
 <head>
-	<title>Uncle Charlie's Funhouse</title>
+	<title>Uncle Charlie's <?= $house; ?></title>
 	<style type="text/css">
 	body {
 		padding-top: 10%;
