@@ -153,15 +153,20 @@ class Metrics:
 		rbi_players = ([], [])
 		for team in boxscore['batting']:
 			# The threshold determined by RBI_THRESHOLD_PERCENT
-			rbi_threshold = float(team['rbi']) * RBI_THRESHOLD_PERCENT
-			for batter in team['batter']:
-				batter_rbi = int(batter['rbi'])
-				# if the batter rbi is high enough, create a tuple ( <LAST NAME>, <RBIs> ) and add it to the list
-				if batter_rbi >= rbi_threshold:
-					rbi_percent = float(team['rbi']) / float(team['rbi'])
-					rbi_players[team_index].append( (batter['name_display_first_last'].split(' ')[-1], batter_rbi, rbi_percent) )
-			# Change the team index
-			team_index = 0
+			team_rbis = float(team['rbi'])
+			rbi_threshold = team_rbis * RBI_THRESHOLD_PERCENT
+			if rbi_threshold > 0:
+				for batter in team['batter']:
+					batter_rbi = int(batter['rbi'])
+					# if the batter rbi is high enough, create a tuple ( <LAST NAME>, <RBIs> ) and add it to the list
+					if batter_rbi >= rbi_threshold:
+						if team_rbis > 0:
+							rbi_percent = batter_rbi / team_rbis
+						else:
+							rbi_percent = 0
+						rbi_players[team_index].append( (batter['name_display_first_last'].split(' ')[-1], batter_rbi, rbi_percent) )
+				# Change the team index
+				team_index = 0
 
 		return rbi_players
 
