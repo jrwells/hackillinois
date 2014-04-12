@@ -18,9 +18,9 @@ def generateSummary(gameData):
 def generateTeaserText(gameData):
 	return ""
 
-
 # initialize db connection
-db = MySQLdb.connect(host="box650.bluehost.com",
+db = MySQLdb.connect(
+		host="box650.bluehost.com",
 		user="colorap5_unclec",
 		passwd="zLoV$&mF*M#w",
 		db="colorap5_unclec")
@@ -52,7 +52,5 @@ if queue:
 				loops = loops + 1
 
 	print "Updated %d game(s)" % loops
-
-
 else:
 	print "No missing data ;)"
