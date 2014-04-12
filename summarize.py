@@ -90,7 +90,7 @@ class Summarize:
 						else:
 							no_hitter_text = no_hitter_text + " and " pitchers[0]['name']
 					else:
-						if len(no_hitter_text):
+						if len(no_hitter_text) == 0:
 							if team['team_flag'] == 'away':
 								no_hitter_text = self.boxscore['away_fname']
 							else:
