@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 
 # return a list of game IDs for games that aren't finished
 def addNewGames(start_time, game_id):
-	db = MySQLdb.connect(host="box650.bluehost.com",
+	db = MySQLdb.connect(
+		host="box650.bluehost.com",
 		user="colorap5_unclec",
 		passwd="zLoV$&mF*M#w",
 		db="colorap5_unclec")
