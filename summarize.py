@@ -1,16 +1,14 @@
-<<<<<<< HEAD
+ERROR_INTEREST_THRESHOLD = 3
+
 class summarize:
 	def get_winner(gameData):
 		runs_scored = gameData['linescore']['r']
-=======
-ERROR_INTEREST_THRESHOLD = 3
 
 class Summarize:
 
 	@staticmethod
 	def get_winner(game_data):
 		runs_scored = game_data['linescore']['r']
->>>>>>> 11da9e6d39fb9261d6998ffba3267ed06a9c07d1
 		if int(runs_scored['home']) > int(runs_scored['away']):
 			winner = game_data['home_team_name']
 			winner_score = runs_scored['home']
