@@ -1,8 +1,8 @@
 class summarize:
-	
+
 	def get_winner(gameData):
 		runs_scored = gameData['linescore']['r']
-		if runs_scored['home'] > runs_scored['away']:
+		if int(runs_scored['home']) > int(runs_scored['away']):
 			winner = gameData['home_team_name']
 			winner_score = runs_scored['home']
 			loser = gameData['away_team_name']
