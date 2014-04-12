@@ -1,17 +1,53 @@
+<<<<<<< HEAD
 class summarize:
 	def get_winner(gameData):
 		runs_scored = gameData['linescore']['r']
+=======
+ERROR_INTEREST_THRESHOLD = 3
+
+class Summarize:
+
+	@staticmethod
+	def get_winner(game_data):
+		runs_scored = game_data['linescore']['r']
+>>>>>>> 11da9e6d39fb9261d6998ffba3267ed06a9c07d1
 		if int(runs_scored['home']) > int(runs_scored['away']):
-			winner = gameData['home_team_name']
+			winner = game_data['home_team_name']
 			winner_score = runs_scored['home']
-			loser = gameData['away_team_name']
+			loser = game_data['away_team_name']
 			loser_score = runs_scored['away']
 		else:
-			winner = gameData['away_team_name']
+			winner = game_data['away_team_name']
 			winner_score = runs_scored['away']
-			loser = gameData['home_team_name']
+			loser = game_data['home_team_name']
 			loser_score = runs_scored['home']
 
-		return "%s defeated %s %d - %d" % (winner, loser, winner_score, loser_score)
+		return "%s defeated %s %s - %s. " % (winner, loser, winner_score, loser_score)
 
+	@staticmethod
+	def get_errors(game_data):
+		error_count = game_data['linescore']['e']
+		error_summary_text = None
 
+		if int(error_count['home']) > ERROR_INTEREST_THRESHOLD:
+			error_summary_text = game_data['home_team_name'] + " had " + error_count['home'] + " errors"
+
+		if int(error_count['away']) > ERROR_INTEREST_THRESHOLD:
+			if error_summary_text:
+				error_summary_text = error_summary_text + " and "
+				end = ""
+
+			else:
+				error_summary_text = ""
+				end = " errors"
+
+			error_summary_text = error_summary_text + game_data['away_team_name'] + " had " + error_count['away'] + end
+
+		if error_summary_text:
+			score = max(int(error_count['home']), int(error_count['away']))
+			error_summary_text = error_summary_text + "."
+
+		else:
+			score = 0
+
+		return (score, error_summary_text)

@@ -1,4 +1,5 @@
 import datetime, json, requests, MySQLdb
+from summarize import *
 
 # return a list of game IDs for games that aren't finished
 def getUnfinishedGames():
@@ -13,7 +14,13 @@ def getUnfinishedGames():
 
 
 def generateSummary(gameData):
-	return "GAME: %s" % str(gameData['home_team_name'])
+	summary = Summarize.get_winner(gameData)
+	error_summary = Summarize.get_errors(gameData)
+
+	if error_summary[1]:
+		summary = summary + error_summary[1]
+
+	return summary
 
 def generateTeaserText(gameData):
 	return ""
