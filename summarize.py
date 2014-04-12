@@ -151,6 +151,7 @@ class Summarize:
 		boxscore = game_data['boxscore']
 		mvp = None
 		mvp_score = 0
+		mvp_tit_for_tat = None
 
 		for team in boxscore['batting']:
 			for batter in team['batter']:
@@ -167,7 +168,8 @@ class Summarize:
 					if cur_score > mvp_score:
 						mvp_score = cur_score
 						mvp = batter['name_display_first_last'].split(' ')[1]
+						mvp_tit_for_tat = (batter['h'], batter['ab'])
 
-		mvp_batter_text = "%s hit well." % (mvp)
+		mvp_batter_text = "%s went %s for %s." % (mvp, mvp_tit_for_tat[0], mvp_tit_for_tat[1])
 		return (MVP_BATTER_VALUE, mvp_batter_text)
 
