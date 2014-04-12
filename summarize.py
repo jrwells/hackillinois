@@ -101,7 +101,7 @@ class Summarize:
 			for team in game_data['boxscore']['pitching']:
 				if int(team['h']) == 0:
 					pitchers = team['pitcher']
-					if len(pitchers) == 1:
+					if type(pitchers) is not list:
 						if len(no_hitter_text) == 0:
 							no_hitter_text = pitchers[0]['name']
 						else:
