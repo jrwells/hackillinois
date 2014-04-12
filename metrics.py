@@ -36,6 +36,29 @@ class Metrics:
 
 	@staticmethod
 	def LeadChanges(game_data):
+		""" Count the number of times a team takes the lead """
+
+		change_count = 0
+		away_score, home_score = 0, 0
+		away_winning, home_winning = False, False
+		for i in game_data['linescore']['inning']:
+			away_score += int(i['away'])
+			home_score += int(i['home'])
+
+			if (away_score > home_score) and not away_winning:
+				away_winning = True
+				home_winning = False
+				change_count += 1
+
+			elif (home_score > away_score) and not home_winning:
+				home_winning = True
+				away_winning = False
+				change_count += 1
+
+			else:
+				home_winning, away_winning = False, False
+
+		return change_count
 
 	@staticmethod
 	def RBIDistribution(game_data):
