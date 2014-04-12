@@ -103,9 +103,9 @@ class Summarize:
 					pitchers = team['pitcher']
 					if type(pitchers) is not list:
 						if len(no_hitter_text) == 0:
-							no_hitter_text = pitchers[0]['name']
+							no_hitter_text = pitchers['name']
 						else:
-							no_hitter_text = no_hitter_text + " and " + pitchers[0]['name']
+							no_hitter_text = no_hitter_text + " and " + pitchers['name']
 					else:
 						if len(no_hitter_text) == 0:
 							if team['team_flag'] == 'away':
