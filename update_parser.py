@@ -1,6 +1,10 @@
 import datetime, json, urllib2, MySQLdb
 from summarize import *
 
+def resetDB():
+	query = "UPDATE `games` SET `finished` = 0;"
+	cur.execute(query)
+
 # return a list of game IDs for games that aren't finished
 def getUnfinishedGames():
 	# get games that have started and haven't finished
@@ -56,6 +60,7 @@ day, month, year = current_date.day, current_date.month, current_date.year
 
 url = '%syear_%s/month_%02d/day_%02d/master_scoreboard.json' % (root, year, int(month), int(day))
 
+resetDB()
 queue = getUnfinishedGames()
 
 if queue:

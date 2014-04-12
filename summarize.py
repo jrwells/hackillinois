@@ -8,7 +8,7 @@ NO_HITTER_VALUE = 10
 MVP_BATTER_VALUE = 2
 PERFECT_GAME_VALUE = 10
 
-#arbitrary ranking constants
+# arbitrary ranking constants
 BATTING_HOMERUN_MULTIPLIER = 0.4
 BATTING_BB_MULTIPLIER = .01
 
@@ -114,7 +114,7 @@ class Summarize:
 							else:
 								no_hitter_text = no_hitter_text + " and " + game_data['boxscore']['home_sname']
 			if len(no_hitter_text) > 0:
-				no_hitter_text += " pitched no a hitter."
+				no_hitter_text += " pitched a no hitter."
 				return (NO_HITTER_VALUE, no_hitter_text)
 			else:
 				return (DO_NOT_MENTION_VALUE, no_hitter_text)
@@ -126,7 +126,7 @@ class Summarize:
 			for team_pitching in game_data['boxscore']['pitching']:
 				for team_batting in game_data['boxscore']['batting']:
 					if team_pitching['team_flag'] != team_batting['team_flag']:
-						if team_batting['h'] == 0 and team_batting['lob'] == 0 and team_batting['r'] == 0:
+						if int(team_batting['h']) == 0 and int(team_batting['lob']) == 0 and int(team_batting['r']) == 0:
 							pitchers = team_pitching['pitcher']
 							if len(pitchers) == 1:
 								perfect_game_text = pitchers[0]['name']
@@ -147,6 +147,7 @@ class Summarize:
 		boxscore = game_data['boxscore']
 		mvp = None
 		mvp_score = 0
+		
 		for team in boxscore['batting']:
 			for batter in team['batter']:
 				#Compare this game's performance to their batting average for the season
