@@ -2,7 +2,7 @@ class Metrics:
 	@staticmethod
 	def InningRunsTotalRuns(game_data):
 		""" Gets the innings where the most proportion of runs """
-		
+
 		boxscore = game_data['boxscore']
 		linescore, home_runs, away_runs, home_inning_runs, away_inning_runs = boxscore['linescore'], float(boxscore['home_team_runs']), float(boxscore['away_team_runs']), [], []
 		for inning in linescore['inning_line_score']:
@@ -11,8 +11,9 @@ class Metrics:
 					home_inning_runs.append(float(inning[key])/home_runs)
 				elif key == 'away':
 					away_inning_runs.append(float(inning[key])/away_runs)
-		away_max, home_max = (max(away_inning_runs), away_inning_runs.index(max(away_inning_runs))), (max(home_inning_runs), home_inning_runs.index(max(home_inning_runs)))
-		return (away_max, home_max)
+		away_max, home_max = max(away_inning_runs), max(home_inning_runs)
+		away_tuple, home_tuple = (away_max, away_inning_runs.index(away_max)), (home_max, home_inning_runs.index(home_max))
+		return (away_tuple, home_tuple)
 
 	@staticmethod
 	def WalksAndBalks(game_data):
