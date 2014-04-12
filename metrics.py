@@ -83,7 +83,14 @@ class Metrics:
 		away_result = (first_away, total_away)
 		home_result = (first_home, total_home)
 
-		return (away_result, home_result)
+		result = {
+			"first_sub_away" : first_away,
+			"total_subs_away" : total_away,
+			"first_sub_home" : first_home,
+			"total_subs_home" : total_home,
+		}
+
+		return result
 
 
 	@staticmethod
