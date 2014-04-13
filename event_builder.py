@@ -72,6 +72,8 @@ class EventBuilder:
 		team_desc = ""
 		events = []
 		for team in team_designation:
+			if inning_metrics[team+'_max'] < 0:
+				continue
 			#Runs the equation to determine the weight, dependant entirely on
 			#constants at the start of the file
 			weight = (float(inning_metrics[team+'_max']) * float(inning_metrics[team+'_inning']) / float(self.gameData['status']['inning']) * min(1, float(inning_metrics[team+'_max']) /
