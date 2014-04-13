@@ -25,8 +25,16 @@ class Metrics:
 				away_inning_runs.append(float(inning['away'])/away_runs)
 
 		away_max, home_max = max(away_inning_runs), max(home_inning_runs)
-		return { 'away_max' : away_max, 'away_inning' : away_inning_runs.index(away_max) + 1, 'away_value' : away_max * away_runs,
-		 'home_max' : home_max, 'home_inning' : home_inning_runs.index(home_max) + 1, 'home_value' : home_max * home_runs }
+
+		result = {
+			'away_max' : away_max,
+			'away_inning' : away_inning_runs.index(away_max) + 1,
+			'away_value' : away_max * away_runs,
+			'home_max' : home_max,
+			'home_inning' : home_inning_runs.index(home_max) + 1,
+			'home_value' : home_max * home_runs
+		}
+		return result
 
 	@staticmethod
 	def WalksAndBalks(game_data):
