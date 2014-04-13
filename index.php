@@ -54,27 +54,7 @@ $house = $houses[array_rand($houses, 1)];
 <html lang="en">
 <head>
 	<title>Uncle Charlie's <?= $house; ?></title>
-	<style type="text/css">
-	body {
-		padding-top: 10%;
-	}
-
-	h2 {
-		line-height: 1.3em !important;
-		font-weight: normal !important;
-	}
-
-	p.lead {
-		text-align: center;
-		margin-bottom: 10%;
-	}
-
-	.moregames {
-		text-align: center;
-		margin-bottom: 5%;
-		font-weight: normal !important;
-	}
-	</style>
+	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </head>
