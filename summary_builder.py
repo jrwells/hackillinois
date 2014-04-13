@@ -45,12 +45,14 @@ TEAMS = {"Orioles":["#Orioles","@Orioles"],
          "Pirates":["#Pirates","@Pirates"]}
 
 class SummaryBuilder:
-  def __init__(self, main_description, winning_team, losing_team):
+  def __init__(self, main_description, short_description, winning_team, losing_team):
     ts = twitter_scraper.TwitterScraper()
     self.pq = Queue.PriorityQueue()
+    self.short_description = short_description
     self.main_description = main_description
     self.winning_team = winning_team
     self.losing_team = losing_team
+    self.event_list = []
     if REAL_DATA:
       ## TODO: map team names to their hashtags
       if winning_team in TEAMS:
@@ -143,6 +145,35 @@ class SummaryBuilder:
         strings.append(str(event))
       added.append(event)
 
+    self.event_list = events
     return " ".join(strings)
+
+  """
+  Build a shorter summary for twitter.
+  """
+  def build_teaser_text(self):
+    strings, added = [self.short_description], []
+    for event in self.event_list:
+        will_add = True
+        if event.event_type == 2:
+          e_owner = ''
+          if type(event.event_owner) == list or type(event.event_owner) == tuple:
+            e_owner = event.event_owner[0]
+          else:
+            e_owner = event.event_owner
+          for add in added:
+            if add.event_type == 2:
+              if type(add.event_owner) == list or type(add.event_owner) == tuple:
+                if e_owner in add.event_owner:
+                  will_add = False
+              else:
+                if e_owner == add.event_owner:
+                  will_add = False
+        if will_add:
+          strings.append(str(event.teaser))
+        added.append(event)
+
+    return " ".join(strings)
+
 
 

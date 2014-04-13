@@ -23,6 +23,7 @@ def getUnfinishedGames():
 def generateSummary(gameData):
 	# start with who won and the score
 	summary = Summarize.get_winner(gameData)
+	short_summary = Summarize.get_winner_short(gameData)
 
 	blurbs = []
 
@@ -70,14 +71,11 @@ def generateSummary(gameData):
 	# #RBI percentage
 	# summary += '<br> RBI Percentage: %s' % (str(Metrics.RBIDistribution(gameData))).replace("'", '')
 	event_builder = EventBuilder(gameData)
-	summary_builder = SummaryBuilder(summary, gameData['away_team_name'], gameData['home_team_name'] )
+	summary_builder = SummaryBuilder(summary, short_summary, gameData['away_team_name'], gameData['home_team_name'] )
 	for event in event_builder.build_events():
 		summary_builder.add_event(event)
 
-	return summary_builder.build_summary()
-
-def generateTeaserText(gameData):
-	return ""
+	return (summary_builder.build_summary(), summary_builder.build_teaser_text())
 
 # initialize db connection
 db = MySQLdb.connect(
@@ -114,8 +112,7 @@ if queue:
 				boxscore = json.load(urllib2.urlopen(root_dir))['data']['boxscore']
 				record['boxscore'] = boxscore
 
-				summary = generateSummary(record)
-				teaserText = generateTeaserText(record)
+				summary, teaserText = generateSummary(record)
 
 				query = "UPDATE `games` SET `finished` = 1, `full_summary` = \"%s\" WHERE `game_id` = '%s' LIMIT 1;" % (summary, record['id'])
 				cur.execute(query)
