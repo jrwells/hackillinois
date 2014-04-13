@@ -1,5 +1,6 @@
 #Creates the events based on data from metrics
 from event import *
+from debug import log
 
 #Arbitrary Constants
 INNING_RUN_PERCENT_THRESHOLD = .4
@@ -103,12 +104,12 @@ class EventBuilder:
 				innings = pitching_metrics["first_sub_" + key]
 
 				pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
-				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.015 * int(strikeouts))
+				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.025 * int(strikeouts))
 
 				events.append(Event(pitcher_blurb, event_weight, this_team_won))
-				print "pitcher blrub: ", pitcher_blurb
-				print "event_weight: ", event_weight
-				print "win: ", this_team_won
+				log("pitcher blrub: %s" % pitcher_blurb)
+				log("event_weight: %s" % event_weight)
+				log("win: %s" % this_team_won)
 		return events
 
 	def build_batting_average_events(self, batting_metrics):
