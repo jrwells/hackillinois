@@ -19,7 +19,7 @@ NON_RBI_RUNS_WEIGHT_PER = -0.08
 TEAM_AVERAGE_DIFFERENCE_POINTS = 0.1
 LEAD_CHANGE_TAKE_AND_HOLD_WEIGHT = 0.2
 LEAD_CHANGE_MAX_WEIGHT = 0.5
-HOME_RUN_WEIGHT = 0.5
+HOME_RUN_WEIGHT = 0.4
 HOME_RUN_RUNNER_BONUS = 0.09
 
 
@@ -219,7 +219,7 @@ class EventBuilder:
 		team_codes = { game_data["away_code"] : "away", game_data["home_code"] : "home" }
 		events = []
 		blurb = ""
-		weight = 0
+		weight = 0.0
 
 		if 'home_runs' not in game_data:
 			return events
@@ -237,7 +237,7 @@ class EventBuilder:
 			if int(hr['runners']) == GRAND_SLAM_RUNNER_COUNT:
 				blurb = hr['last'] + " hit a grand slam"
 				team_name = team_names[team_codes[hr['team_code'].encode("ascii")]]
-				weight = HOME_RUN_WEIGHT + int(hr['runners']) * HOME_RUN_RUNNER_BONUS
+				weight = HOME_RUN_WEIGHT + float(hr['runners']) * HOME_RUN_RUNNER_BONUS
 				events.append(Event(blurb, weight, team_name, team_codes[hr['team_code']] == self.winning_team))
 
 		# report player home runs
