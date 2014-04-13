@@ -52,6 +52,14 @@ class Metrics:
 		return urllib2.urlopen(eventlog_url).read()
 
 	@staticmethod
+	def getPitcherStats(game_data):
+		stats = dict()
+		for team in game_data["pitching"]:
+				stats["strikeouts_" + team["team_flag"]] = team["pitcher"][0]["so"]
+				stats["name_" + team["team_flag"]] = team["pitcher"][0]["name"].split(",")[0]
+		return stats
+
+	@staticmethod
 	def PitchingChangeDistribution(game_data):
 		""" Returns a tuple containing a tuple for each team:
 		    (inning of first change, number of changes) """
@@ -86,6 +94,8 @@ class Metrics:
 			"first_sub_home" : first_home,
 			"total_subs_home" : total_home
 		}
+
+		result.update(self.getPitcherStats(game_data))
 
 		return result
 
