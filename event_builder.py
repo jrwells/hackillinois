@@ -99,10 +99,15 @@ class EventBuilder:
 			weight = NON_RBI_RUNS_WEIGHT_PER * walks_metrics[i]
 			weight = min(weight, NON_RBI_RUNS_MAX_WEIGHT)
 			blurb = "had a defensive breakdown."
-			events.append(Event(blurb, weight, team_names[i], team_designation[i] == self.winning_team))
 
-			log("weight: %d" % weight)
-			log("blurb: " + team_names[i] + " " + blurb)
+			if weight > 0:
+				events.append(Event(blurb, weight, team_names[i], team_designation[i] == self.winning_team))
+
+				log("weight: %d" % weight)
+				log("blurb: " + team_names[i] + " " + blurb)
+
+			else:
+				log("ignored event because weight 0")
 
 		return events
 
