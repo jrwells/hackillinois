@@ -8,6 +8,7 @@ INNING_RUN_TOTAL_THRESHOLD = 3
 INNING_RUN_LOSS_MULTIPLIER = .75
 IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED = 8
 TEAM_AVERAGE_INTERESTINGNESS_THRESHOLD = 0.05
+LEAD_CHANGE_THRESHOLD = 3
 
 # Arbitrary Weights
 INNING_RUN_MAX_WEIGHT = .7
@@ -15,6 +16,9 @@ STAR_PITCHER_BASE_WEIGHT = 0.4
 NON_RBI_RUNS_MAX_WEIGHT = -0.6
 NON_RBI_RUNS_WEIGHT_PER = -0.08
 TEAM_AVERAGE_DIFFERENCE_POINTS = 0.1
+LEAD_CHANGE_TAKE_AND_HOLD_WEIGHT = 0.2
+LEAD_CHANGE_MAX_WEIGHT = 0.5
+
 
 from metrics import *
 from summary_builder import *
@@ -156,13 +160,32 @@ class EventBuilder:
 				log("weight: %d" % weight)
 				log("blurb: " + team_names[i] + " " + blurb)
 
-			else:
-				log("fuck fuck fuck fuck fuck %d" % batting_metrics[i])
-
 		return events
 
 	def build_lead_change_events(self, lead_metrics):
-		None
+		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
+		team_types = ["away", "home"]
+		events = []
+		weight = 0
+		blurb = ''
+
+		if lead_metrics['change_count'] == 1:
+			weight = LEAD_CHANGE_TAKE_AND_HOLD_WEIGHT
+			blurb = "took the lead and never gave it up"
+			events.append(Event(blurb, weight, team_names[self.winning_team], True))
+
+		elif lead_metrics['change_count'] > LEAD_CHANGE_THRESHOLD:
+			weight = LEAD_CHANGE_MAX_WEIGHT * float(lead_metrics['last_change']) / float(self.gameData['status']['inning'])
+			final_inning = int(lead_metrics['last_change'])
+			k = final_inning%10
+			ordinal_val = "%d%s"%(final_inning,"tsnrhtdd"[(final_inning/10%10!=1)*(k<4)*k::4])
+			blurb = "battled for the lead and finally held it in the %s inning" % (ordinal_val)
+			events.append(Event(blurb, weight, team_names[self.winning_team], True))
+
+		log("weight: %d" % weight)
+		log("blurb: " + team_names[self.winning_team] + " " + blurb)
+
+		return events
 
 	def build_rbi_events(self, rbi_metrics):
 		None
