@@ -24,22 +24,22 @@ class Event_builder:
 		self.gameData = gameData
 
 		#inning runs total runs
-		inning_runs = Metrics.InningRunsTotalRuns(gameData)
+		inning_runs = self.build_inning_events(Metrics.InningRunsTotalRuns(gameData))
 
 		#walked in runs
-		walked_runs = Metrics.WalksAndBalks(gameData)
+		walked_runs = self.build_walks_events(Metrics.WalksAndBalks(gameData))
 
 		#pitching changes
-		pitching_changes = Metrics.PitchingChangeDistribution(gameData)
+		pitching_changes = self.build_pitching_change_events(Metrics.PitchingChangeDistribution(gameData))
 
 		#Game batting ave
-		game_batting_ave = Metrics.GameBattingAvgVsSeason(gameData)
+		game_batting_ave = self.build_batting_average_events(Metrics.GameBattingAvgVsSeason(gameData))
 
 		#Lead changes
-		lead_changes = Metrics.LeadChanges(gameData)
+		lead_changes = self.build_lead_change_events(Metrics.LeadChanges(gameData))
 
 		#RBI percentage
-		rbi_percentage = Metrics.RBIDistribution(gameData)
+		rbi_percentage = self.build_rbi_events(Metrics.RBIDistribution(gameData))
 
 		return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
 			lead_changes + rbi_percentage)
@@ -95,7 +95,12 @@ class Event_builder:
 
 		return events
 
+	def build_batting_average_events(self, batting_metrics):
+		None
+
 	def build_lead_change_events(self, lead_metrics):
+		None
 
 	def build_rbi_events(self, rbi_metrics):
+		None
 
