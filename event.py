@@ -19,6 +19,6 @@ class Event:
 
 	def convert_teaser(self):
 		if self.event_type <= 1:
-			return self.team_name + " " + self.description + "."
+			return self.team_name + " " + self.teaser + "."
 		else:
-			return self.description + "."
+			return self.teaser + "."
