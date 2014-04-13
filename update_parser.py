@@ -97,7 +97,7 @@ day, month, year = current_date.day, current_date.month, current_date.year
 
 url = '%syear_%s/month_%02d/day_%02d/master_scoreboard.json' % (root, year, int(month), int(day))
 
-resetDB()
+
 queue = getUnfinishedGames()
 
 if queue:
