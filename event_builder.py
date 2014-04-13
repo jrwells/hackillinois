@@ -104,7 +104,7 @@ class EventBuilder:
 		for i in range(0, len(walks_metrics)):
 			weight = NON_RBI_RUNS_WEIGHT_PER * walks_metrics[i]
 			weight = min(weight, NON_RBI_RUNS_MAX_WEIGHT)
-			blurb = "had a defensive breakdown."
+			blurb = "had a defensive breakdown"
 
 			if weight > 0:
 				events.append(Event(blurb, weight, team_names[i], team_designation[i] == self.winning_team))
@@ -131,7 +131,7 @@ class EventBuilder:
 				strikeouts = pitching_metrics["strikeouts_" + key]
 				innings = pitching_metrics["first_sub_" + key]
 
-				pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
+				pitcher_blurb = "%s pitched %s strikeouts in %s innings" % (pitcher_name, strikeouts, innings)
 				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.025 * int(strikeouts))
 
 				events.append(Event(pitcher_blurb, event_weight, team_names[key], this_team_won))
@@ -151,9 +151,9 @@ class EventBuilder:
 				weight = TEAM_AVERAGE_DIFFERENCE_POINTS * batting_metrics[i]
 
 				if weight > 0:
-					blurb = "were hot at the plate."
+					blurb = "were hot at the plate"
 				else:
-					blurb = "had a cold offense."
+					blurb = "had a cold offense"
 
 				events.append(Event(blurb, weight, team_names[i], self.winning_team == team_types[i]))
 
