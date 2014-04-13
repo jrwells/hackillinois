@@ -170,7 +170,7 @@ class SummaryBuilder:
                 if e_owner == add.event_owner:
                   will_add = False
         if will_add:
-          strings.append(str(event.teaser))
+          strings.append(str(event.convert_teaser()))
         added.append(event)
 
     return " ".join(strings)
