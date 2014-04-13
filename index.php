@@ -130,7 +130,7 @@ $house = $houses[array_rand($houses, 1)];
 ?><!doctype html>
 <html lang="en">
 <head>
-	<title>Buntly</title>
+	<title>Bunt.ly</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="style.css">
