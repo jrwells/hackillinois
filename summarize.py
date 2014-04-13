@@ -58,6 +58,28 @@ class Summarize:
 		return "%s %d - %d%s. " % (defeat_string, winner_score, loser_score, extra_innings)
 
 	@staticmethod
+	def get_winner_short(game_data):
+		runs_scored = game_data['linescore']['r']
+		if int(runs_scored['home']) > int(runs_scored['away']):
+			winner = game_data['home_team_name']
+			winner_score = int(runs_scored['home'])
+			loser = game_data['away_team_name']
+			loser_score = int(runs_scored['away'])
+		else:
+			winner = game_data['away_team_name']
+			winner_score = int(runs_scored['away'])
+			loser = game_data['home_team_name']
+			loser_score = int(runs_scored['home'])
+
+		# check for extra innings
+		inning_count = int(game_data['status']['inning'])
+		extra_innings = ""
+		if inning_count > NORMAL_INNING_COUNT:
+			extra_innings = " in %d innings" % inning_count
+
+		return "%s %d - %s %d%s. " % (winner, winner_score, loser, loser_score, extra_innings)
+
+	@staticmethod
 	def get_errors(game_data):
 		error_count = game_data['linescore']['e']
 		error_summary_text = None
