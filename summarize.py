@@ -44,7 +44,7 @@ class Summarize:
 		inning_count = int(game_data['status']['inning'])
 		extra_innings = ""
 		if inning_count > NORMAL_INNING_COUNT:
-			extra_innings = " in %d" % inning_count
+			extra_innings = " in %d innings" % inning_count
 
 		# pick an action verb
 		if winner_score - loser_score <= NARROW_THRESHOLD:
