@@ -14,8 +14,8 @@ STAR_PITCHER_BASE_WEIGHT = .5
 from metrics import *
 from summary_builder import *
 from event import *
-class Event_builder:
-	def build_events(self, gameData):
+class EventBuilder:
+	def __init__(self, gameData):
 		if (int(gameData['linescore']['r']['home']) > int(gameData['linescore']['r']['away']) ):
 			self.winning_team = "home"
 		else:
@@ -23,23 +23,32 @@ class Event_builder:
 
 		self.gameData = gameData
 
+		self.build_events()
+
+	def build_events(self):
 		#inning runs total runs
-		inning_runs = self.build_inning_events(Metrics.InningRunsTotalRuns(gameData))
+		inning_runs = self.build_inning_events(Metrics.InningRunsTotalRuns(self.gameData))
+		print inning_runs
 
 		#walked in runs
-		walked_runs = self.build_walks_events(Metrics.WalksAndBalks(gameData))
+		walked_runs = self.build_walks_events(Metrics.WalksAndBalks(self.gameData))
+		print walked_runs
 
 		#pitching changes
-		pitching_changes = self.build_pitching_change_events(Metrics.PitchingChangeDistribution(gameData))
+		pitching_changes = self.build_pitching_change_events(Metrics.PitchingChangeDistribution(self.gameData))
+		print pitching_changes
 
 		#Game batting ave
-		game_batting_ave = self.build_batting_average_events(Metrics.GameBattingAvgVsSeason(gameData))
+		game_batting_ave = self.build_batting_average_events(Metrics.GameBattingAvgVsSeason(self.gameData))
+		print game_batting_ave
 
 		#Lead changes
-		lead_changes = self.build_lead_change_events(Metrics.LeadChanges(gameData))
+		lead_changes = self.build_lead_change_events(Metrics.LeadChanges(self.gameData))
+		print lead_changes
 
 		#RBI percentage
-		rbi_percentage = self.build_rbi_events(Metrics.RBIDistribution(gameData))
+		rbi_percentage = self.build_rbi_events(Metrics.RBIDistribution(self.gameData))
+		print rbi_percentage
 
 		return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
 			lead_changes + rbi_percentage)
@@ -64,7 +73,7 @@ class Event_builder:
 			#Crazy stuff to print ordinal numbers
 			runs = int(team[team_designation[team_index]+'_value'])
 			k = runs%10
-			team_desc = "scored %s runs in the %s%s inning" % (team_names[team_index), runs, "%d%s"%(runs,"tsnrhtdd"[(runs/10%10!=1)*(k<4)*k::4]))
+			team_desc = "scored %s runs in the %s%s inning" % (team_names[team_index]), runs, "%d%s"%(runs,"tsnrhtdd"[(runs/10%10!=1)*(k<4)*k::4])
 			team_index += 1
 
 			#adds the new a event to the event list

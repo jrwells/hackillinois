@@ -1,6 +1,7 @@
 import datetime, json, urllib2, MySQLdb
 from summarize import *
 from metrics import *
+from event_builder import *
 
 def resetDB():
 	query = "UPDATE `games` SET `finished` = 0;"
@@ -68,7 +69,7 @@ def generateSummary(gameData):
 	#RBI percentage
 	summary += '<br> RBI Percentage: %s' % (str(Metrics.RBIDistribution(gameData))).replace("'", '')
 
-	# print summary
+	EventBuilder(gameData)
 
 	return summary
 
