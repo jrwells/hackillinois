@@ -65,11 +65,12 @@ class EventBuilder:
 		for team in team_designation:
 			#Runs the equation to determine the weight, dependant entirely on
 			#constants at the start of the file
-			weight = float(inning_metrics[team+'_max']) * float(inning_metrics[team+'_inning']) / float(self.gameData['status']['inning']) * min(1, INNING_RUN_PERCENT_THRESHOLD / float(inning_metrics[team+'_max'])) * min(1, INNING_RUN_TOTAL_THRESHOLD / inning_metrics[team+'_value'])
+			weight = float(inning_metrics[team+'_max']) * float(inning_metrics[team+'_inning']) / float(self.gameData['status']['inning']) * min(1, float(inning_metrics[team+'_max']) / INNING_RUN_PERCENT_THRESHOLD) * min(1, inning_metrics[team+'_value'] / INNING_RUN_TOTAL_THRESHOLD) * INNING_RUN_MAX_WEIGHT
+			print weight
 			#If they lose, inflict a weight penalty
 			if self.winning_team != team:
 				weight = weight / float(self.gameData['linescore']['r']['diff']) * INNING_RUN_LOSS_MULTIPLIER
-			weight = min(weight, INNING_RUN_MAX_WEIGHT)
+
 			#Crazy stuff to print ordinal numbers
 
 			runs = int(inning_metrics[team+'_inning'])
