@@ -2,6 +2,9 @@
 
 #Arbitrary Constants
 INNING_RUN_PERCENT_THRESHOLD = .4
+INNING_RUN_TOTAL_THRESHOLD = 3
+INNING_RUN_MAX_WEIGHT = .7
+INNING_RUN_LOSS_MULTIPLIER = .75
 
 from metrics import *
 class Event_builder:
@@ -32,9 +35,19 @@ class Event_builder:
 		rbi_percentage = Metrics.RBIDistribution(gameData)
 
 	def build_inning_events(self, inning_metrics):
+		team_designation = ('away','home')
+		team_index = 0
+		team_weights = [None,None]
+		team_desc = ['','']
+		scores = (int(self.gameData['linescore']['r']['away']), int(self.gameData['linescore']['r']['home']) )
 		for team in inning_metrics:
-			if team[0] > INNING_RUN_PERCENT_THRESHOLD and
+			weight = float(team[0]) * float(team[1]) / float(self.gameData['status']['inning']) * min(1, INNING_RUN_PERCENT_THRESHOLD / float(team[0])) * min(1, INNING_RUN_TOTAL_THRESHOLD / float(self.gameData['linescore']['inning'][int(team[1])][team_designation[team_index]])) * INNING_RUN_MAX_WEIGHT
+			if self.winning_team != team_designation[team_index]:
+				weight = weight / float(self.gameData['linescore']['r']['diff']) * INNING_RUN_LOSS_MULTIPLIER
 
+
+			team_weights[team_index] = weight
+			team_index += 1
 	def build_walks_events(self, walks_metrics):
 
 	def build_pitching_change_events(self, pitching_metrics):
