@@ -60,24 +60,29 @@ class EventBuilder:
 		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
 		team_designation = ('away','home')
 		team_index = 0
-		team_desc = ''
+		team_desc = ""
 		events = []
-		for team in inning_metrics:
+		for team in team_designation:
 			#Runs the equation to determine the weight, dependant entirely on
 			#constants at the start of the file
-			weight = float(team[team_designation[team_index]+'_max']) * float(team[team_designation[team_index]+'_inning']) / float(self.gameData['status']['inning']) * min(1, INNING_RUN_PERCENT_THRESHOLD / float(team[team_designation[team_index]+'_max'])) * min(1, INNING_RUN_TOTAL_THRESHOLD / team[team_designation[team_index]+'_value']) * INNING_RUN_MAX_WEIGHT
+			weight = float(inning_metrics[team+'_max']) * float(inning_metrics[team+'_inning']) / float(self.gameData['status']['inning']) * min(1, INNING_RUN_PERCENT_THRESHOLD / float(inning_metrics[team+'_max'])) * min(1, INNING_RUN_TOTAL_THRESHOLD / inning_metrics[team+'_value'])
 			#If they lose, inflict a weight penalty
-			if self.winning_team != team_designation[team_index]:
+			if self.winning_team != team:
 				weight = weight / float(self.gameData['linescore']['r']['diff']) * INNING_RUN_LOSS_MULTIPLIER
-
+			weight = min(weight, INNING_RUN_MAX_WEIGHT)
 			#Crazy stuff to print ordinal numbers
-			runs = int(team[team_designation[team_index]+'_value'])
+
+			runs = int(inning_metrics[team+'_inning'])
 			k = runs%10
-			team_desc = "scored %s runs in the %s%s inning" % (team_names[team_index]), runs, "%d%s"%(runs,"tsnrhtdd"[(runs/10%10!=1)*(k<4)*k::4])
+			ordinal_val = "%d%s"%(runs,"tsnrhtdd"[(runs/10%10!=1)*(k<4)*k::4])
+			team_desc = "scored %s runs in the %s inning" % (inning_metrics[team+'_value'], ordinal_val )
 			team_index += 1
 
 			#adds the new a event to the event list
-			events.append(event(team_desc, weight,self.winning_team))
+			events.append(Event(team_desc, weight,self.winning_team == team))
+			print "team_desc: ",team_desc
+			print "weight: ", weight
+			print "winz", self.winning_team
 
 		return events
 
@@ -98,10 +103,12 @@ class EventBuilder:
 				innings = pitching_metrics["first_sub_" + key]
 
 				pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
-				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.15 * strikeouts)
+				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.15 * int(strikeouts))
 
-				events.append(event(pitcher_blurb, event_weight, this_team_won))
-
+				events.append(Event(pitcher_blurb, event_weight, this_team_won))
+				print "pitcher blrub: ", pitcher_blurb
+				print "event_weight: ", event_weight
+				print "win: ", this_team_won
 		return events
 
 	def build_batting_average_events(self, batting_metrics):
