@@ -1,6 +1,7 @@
 import datetime, json, urllib2, MySQLdb
 from summarize import *
 from metrics import *
+from event_builder import *
 
 def resetDB():
 	query = "UPDATE `games` SET `finished` = 0;"
@@ -51,13 +52,13 @@ def generateSummary(gameData):
 			summary = summary + " " + blurbs[i][1]
 
 	#inning runs total runs
-	summary += '<br> Inning Runs / Total Runs: %s' % (str(Metrics.InningRunsTotalRuns(gameData)))
+	summary += '<br> Inning Runs / Total Runs: %s' % (str(Metrics.InningRunsTotalRuns(gameData))).replace("'", '')
 
 	#walked in runs
 	summary += '<br> Walked in Runs: %s' % (str(Metrics.WalksAndBalks(gameData)))
 
 	#pitching changes
-	summary += '<br> Pitching Changes: %s' % (str(Metrics.PitchingChangeDistribution(gameData)))
+	summary += '<br> Pitching Changes: %s' % (str(Metrics.PitchingChangeDistribution(gameData))).replace("'", '')
 
 	#Game batting ave
 	summary += '<br> Game Batting Aves: %s' % (str(Metrics.GameBattingAvgVsSeason(gameData)))
@@ -66,9 +67,9 @@ def generateSummary(gameData):
 	summary += '<br> Lead Changes: %s' % (str(Metrics.LeadChanges(gameData)))
 
 	#RBI percentage
-	#summary += '<br> RBI Percentage: %s' % (str(Metrics.RBIDistribution(gameData)))
+	summary += '<br> RBI Percentage: %s' % (str(Metrics.RBIDistribution(gameData))).replace("'", '')
 
-	# print summary
+	EventBuilder(gameData)
 
 	return summary
 
