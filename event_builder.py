@@ -249,7 +249,14 @@ class EventBuilder:
 					plural = ''
 					if player[1] > 1:
 						plural = 's'
-					blurb = "%s hit %s RBI%s" % (player[0], player[1], plural)
+
+					# getting casual now
+					if player[1] == 1:
+						count = "an"
+					else:
+						count = player[1]
+
+					blurb = "%s hit %s RBI%s" % (player[0], count, plural)
 					short_blurb = "%s %s RBI %s" % (player[0], player[1], plural)
 					weight = float(player[2])
 					event_owner = player

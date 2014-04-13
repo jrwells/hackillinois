@@ -1,4 +1,4 @@
-import requests, MySQLdb
+import urllib2, MySQLdb, json
 from pytz import timezone
 from datetime import datetime, timedelta
 
@@ -19,8 +19,13 @@ def addNewGames(start_time, game_id):
 root = 'http://gd2.mlb.com/components/game/mlb/'
 current_date = datetime.now()
 day, month, year = current_date.day, current_date.month, current_date.year
+
+# day = 12
+# month = 4
+# year = 2014
+
 url = '%syear_%s/month_%02d/day_%02d/master_scoreboard.json' % (root, year, int(month), int(day))
-master_scoreboard =  requests.get(url).json()
+master_scoreboard =  json.load(urllib2.urlopen(url))
 games = master_scoreboard['data']['games']['game']
 
 timezones = { 'ET' : 'US/Eastern', 'MT' : 'US/Mountain', 'CT': 'US/Central', 'PT': 'US/Pacific', 'MST' : 'US/Mountain' }
@@ -31,5 +36,3 @@ for game in games:
 	game_datetime = datetime.strptime("%s-%s-%s %s %s" % (year, month, day, game['home_time'], game['ampm']), "%Y-%m-%d %I:%M %p")
 	mountain_time = game_timezone.localize(game_datetime).astimezone(timezone('US/Mountain')).strftime("%Y-%m-%d %H:%M")
 	addNewGames(mountain_time, game['id'])
-
-

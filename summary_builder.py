@@ -9,7 +9,7 @@ RELEVANCE_WEIGHT = 0.10
 
 MAX_STRINGS = 6
 
-REAL_DATA = False # each run costs 4 api calls to Alchemy - don't overuse
+REAL_DATA = True # each run costs 4 api calls to Alchemy - don't overuse
 
 TEAMS = {"Orioles":["#Orioles","@Orioles"],
          "Red Sox":["#RedSox","@RedSox"],
