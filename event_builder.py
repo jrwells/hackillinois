@@ -7,8 +7,9 @@ INNING_RUN_PERCENT_THRESHOLD = .4
 INNING_RUN_TOTAL_THRESHOLD = 3
 INNING_RUN_LOSS_MULTIPLIER = .75
 IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED = 8
-TEAM_AVERAGE_INTERESTINGNESS_THRESHOLD = 0.05
+TEAM_AVERAGE_INTERESTINGNESS_THRESHOLD = 0.15
 LEAD_CHANGE_THRESHOLD = 3
+GRAND_SLAM_RUNNER_COUNT = 3
 
 # Arbitrary Weights
 INNING_RUN_MAX_WEIGHT = .7
@@ -18,6 +19,8 @@ NON_RBI_RUNS_WEIGHT_PER = -0.08
 TEAM_AVERAGE_DIFFERENCE_POINTS = 0.1
 LEAD_CHANGE_TAKE_AND_HOLD_WEIGHT = 0.2
 LEAD_CHANGE_MAX_WEIGHT = 0.5
+HOME_RUN_WEIGHT = 0.4
+HOME_RUN_RUNNER_BONUS = 0.09
 
 
 from metrics import *
@@ -37,30 +40,27 @@ class EventBuilder:
 	def build_events(self):
 		#inning runs total runs
 		inning_runs = self.build_inning_events(Metrics.InningRunsTotalRuns(self.gameData))
-		print inning_runs
 
 		#walked in runs
 		walked_runs = self.build_walks_events(Metrics.WalksAndBalks(self.gameData))
-		print walked_runs
 
 		#pitching changes
 		pitching_changes = self.build_pitching_change_events(Metrics.PitchingChangeDistribution(self.gameData))
-		print pitching_changes
 
 		#Game batting ave
 		game_batting_ave = self.build_batting_average_events(Metrics.GameBattingAvgVsSeason(self.gameData))
-		print game_batting_ave
 
 		#Lead changes
 		lead_changes = self.build_lead_change_events(Metrics.LeadChanges(self.gameData))
-		print lead_changes
 
 		#RBI percentage
 		rbi_percentage = self.build_rbi_events(Metrics.RBIDistribution(self.gameData))
-		print rbi_percentage
+
+		# Home runs & grand slams
+		home_runs = self.build_homerun_events(self.gameData)
 
 		return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
-			lead_changes + rbi_percentage)
+			lead_changes + rbi_percentage + home_runs)
 
 	def build_inning_events(self, inning_metrics):
 		""" Builds the events for highest scoring innings, returns a list of
@@ -72,9 +72,11 @@ class EventBuilder:
 		team_desc = ""
 		events = []
 		for team in team_designation:
+			if int(inning_metrics[team+'_max']) < 1:
+				continue
 			#Runs the equation to determine the weight, dependant entirely on
 			#constants at the start of the file
-			weight = (float(inning_metrics[team+'_max']) * float(inning_metrics[team+'_inning']) / float(self.gameData['status']['inning']) * min(1, float(inning_metrics[team+'_max']) / 
+			weight = (float(inning_metrics[team+'_max']) * float(inning_metrics[team+'_inning']) / float(self.gameData['status']['inning']) * min(1, float(inning_metrics[team+'_max']) /
 				INNING_RUN_PERCENT_THRESHOLD) * min(1, inning_metrics[team+'_value'] / INNING_RUN_TOTAL_THRESHOLD) * INNING_RUN_MAX_WEIGHT)
 			log("weight: %s" % weight)
 			#If they lose, inflict a weight penalty
@@ -154,7 +156,7 @@ class EventBuilder:
 				if weight > 0:
 					blurb = "were strong at the plate"
 				else:
-					blurb = "had an off night for offence"
+					blurb = "had an off night for offense"
 
 				events.append(Event(blurb, weight, team_names[i], self.winning_team == team_types[i]))
 
@@ -203,14 +205,60 @@ class EventBuilder:
 					blurb = ' and '.join(players)
 					blurb += " hit a combined %s RBIs" % (sum(rbis))
 					weight = sum(rbi_percent) / len(rbi_percent)
-					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_names[team_types[index]]))
+					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
 				else:
 					print team
 					player = team[0]
 					blurb = "%s hit %s RBIs" % (player[0], player[1])
 					weight = float(player[2])
-					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_names[team_types[index]]))
+					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
+			index+=1
 		return events
 
+	def build_homerun_events(self, game_data):
+		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
+		team_codes = { game_data["away_code"] : "away", game_data["home_code"] : "home" }
+		events = []
+		blurb = ""
+		weight = 0.0
 
+		if 'home_runs' not in game_data:
+			return events
+
+		# check for grand slams
+		game_home_runs = game_data['home_runs']['player']
+
+		# make into list if not
+		try:
+			var = game_home_runs[0]['runners']
+		except:
+			game_home_runs = [game_home_runs]
+
+		for hr in game_home_runs:
+			if int(hr['runners']) == GRAND_SLAM_RUNNER_COUNT:
+				blurb = hr['last'] + " hit a grand slam"
+				team_name = team_names[team_codes[hr['team_code'].encode("ascii")]]
+				weight = HOME_RUN_WEIGHT + float(hr['runners']) * HOME_RUN_RUNNER_BONUS
+				events.append(Event(blurb, weight, team_name, team_codes[hr['team_code']] == self.winning_team))
+
+		# report player home runs
+		max_hr = 0
+		max_hr_name = None
+		for hr in game_home_runs:
+			rbi = int(hr['runners']) + 1
+
+			if(rbi == 4):
+				continue
+
+			if rbi == 1:
+				hr_noun = "solo home run"
+			else:
+				hr_noun = "%d run homer" % rbi
+
+			blurb = hr['last'] + " hit a %s" % hr_noun
+			team_name = team_names[team_codes[hr['team_code'].encode("ascii")]]
+			weight = HOME_RUN_WEIGHT + int(hr['runners']) * HOME_RUN_RUNNER_BONUS
+			events.append(Event(blurb, weight, team_name, team_codes[hr['team_code']] == self.winning_team))
+
+		return events
 
