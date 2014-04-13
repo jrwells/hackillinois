@@ -199,7 +199,7 @@ class EventBuilder:
 					players = [p[0] for p in team]
 					rbis = map(int,[p[1] for p in team])
 					rbi_percent = map(float, [p[2] for p in team])
-					blurb = ','.join(players)
+					blurb = ' and '.join(players)
 					blurb += " hit a combined %s RBIs" % (sum(rbis))
 					weight = sum(rbi_percent) / len(rbi_percent)
 					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_names[team_types[index]]))
