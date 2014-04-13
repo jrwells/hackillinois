@@ -60,7 +60,7 @@ class EventBuilder:
 		home_runs = self.build_homerun_events(self.gameData)
 
 		return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
-			lead_changes + rbi_percentage)
+			lead_changes + rbi_percentage + home_runs)
 
 	def build_inning_events(self, inning_metrics):
 		""" Builds the events for highest scoring innings, returns a list of
@@ -245,6 +245,9 @@ class EventBuilder:
 		max_hr_name = None
 		for hr in game_home_runs:
 			rbi = int(hr['runners']) + 1
+
+			if(rbi == 4):
+				continue
 
 			if rbi == 1:
 				hr_noun = "solo home run"
