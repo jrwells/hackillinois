@@ -6,7 +6,7 @@ RBI_THRESHOLD_PERCENT = .33
 class Metrics:
 	@staticmethod
 	def InningRunsTotalRuns(game_data):
-		""" Gets the innings where the most proportion of runs """
+		""" Gets the innings for each team which has the most proportion of runs """
 
 		linescore = game_data['boxscore']['linescore']
 		home_runs, away_runs, home_inning_runs, away_inning_runs = float(linescore['home_team_runs']), float(linescore['away_team_runs']), [], []
@@ -25,8 +25,8 @@ class Metrics:
 				away_inning_runs.append(float(inning['away'])/away_runs)
 
 		away_max, home_max = max(away_inning_runs), max(home_inning_runs)
-		away_tuple, home_tuple = (away_max, away_inning_runs.index(away_max) + 1), (home_max, home_inning_runs.index(home_max) + 1)
-		return (away_tuple, home_tuple)
+		return { 'away_max' : away_max, 'away_inning' : away_inning_runs.index(away_max) + 1, 'away_value' : away_max * away_runs,
+		 'home_max' : home_max, 'home_inning' : home_inning_runs.index(home_max) + 1, 'home_value' : home_max * home_runs }
 
 	@staticmethod
 	def WalksAndBalks(game_data):
@@ -80,10 +80,14 @@ class Metrics:
 							first_home = int(event.get("inning"))
 						total_home += 1
 
-		away_result = (first_away, total_away)
-		home_result = (first_home, total_home)
+		result = {
+			"first_sub_away" : first_away,
+			"total_subs_away" : total_away,
+			"first_sub_home" : first_home,
+			"total_subs_home" : total_home
+		}
 
-		return (away_result, home_result)
+		return result
 
 
 	@staticmethod
