@@ -113,7 +113,7 @@ class SummaryBuilder:
   """
   def build_summary(self):
     strings = [self.main_description]
-    winning_events, losing_events = [], []
+    winning_events, losing_events, added = [], [], []
     while len(strings) < MAX_STRINGS and not self.pq.empty():
       pri, event = self.pq.get_nowait()
       if event.team_name == self.winning_team:
@@ -124,6 +124,25 @@ class SummaryBuilder:
     losing_events.sort(key=lambda x: x.event_type, reverse=False)
     events = winning_events + losing_events
     for event in events:
-      strings.append(str(event))
+      will_add = True
+      if event.event_type == 2:
+        e_owner = ''
+        if type(event.event_owner) == list or type(event.event_owner) == tuple:
+          e_owner = event.event_owner[0]
+        else:
+          e_owner = event.event_owner
+        for add in added:
+          if add.event_type == 2:
+            if type(add.event_owner) == list or type(add.event_owner) == tuple:
+              if e_owner in add.event_owner:
+                will_add = False
+            else:
+              if e_owner == add.event_owner:
+                will_add = False
+      if will_add:
+        strings.append(str(event))
+      added.append(event)
 
     return " ".join(strings)
+
+
