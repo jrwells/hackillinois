@@ -301,7 +301,8 @@ class EventBuilder:
 
 		for hr in game_home_runs:
 			if int(hr['runners']) == GRAND_SLAM_RUNNER_COUNT:
-				blurb = hr['last'] + " hit a grand slam"
+				action_word = random.choice(['hit', 'rocked', 'scored', 'recorded'])
+				blurb = hr['last'] + " %s a grand slam" % (action_word)
 				short_blurb = hr['last'] + " Grand Slam"
 				event_owner = hr['last']
 				team_name = team_names[team_codes[hr['team_code'].encode("ascii")]]
@@ -322,7 +323,8 @@ class EventBuilder:
 			else:
 				hr_noun = "%d run homer" % rbi
 
-			blurb = hr['last'] + " hit a %s" % hr_noun
+			action_word = random.choice(['hit', 'rocked', 'scored', 'recorded'])
+			blurb = hr['last'] + " %s a %s" % (action_word, hr_noun)
 			short_blurb = hr['last'] + "HR"
 			event_owner = hr['last']
 			team_name = team_names[team_codes[hr['team_code'].encode("ascii")]]
