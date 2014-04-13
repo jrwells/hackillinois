@@ -112,9 +112,9 @@ if queue:
 				boxscore = json.load(urllib2.urlopen(root_dir))['data']['boxscore']
 				record['boxscore'] = boxscore
 
-				summary, teaserText = generateSummary(record)
+				summary, teaser_text = generateSummary(record)
 
-				query = "UPDATE `games` SET `finished` = 1, `full_summary` = \"%s\" WHERE `game_id` = '%s' LIMIT 1;" % (summary, record['id'])
+				query = "UPDATE `games` SET `finished` = 1, `full_summary` = \"%s\", `teaser_text` = \"%s\" WHERE `game_id` = '%s' LIMIT 1;" % (summary, teaser_text, record['id'])
 				cur.execute(query)
 
 				loops = loops + 1
