@@ -3,6 +3,7 @@ from summarize import *
 from metrics import *
 from event_builder import *
 from summary_builder import *
+from tweeter import *
 
 def resetDB():
 	query = "UPDATE `games` SET `finished` = 0;"
@@ -102,6 +103,8 @@ queue = getUnfinishedGames()
 if queue:
 	master_scoreboard = json.load(urllib2.urlopen(url))
 	# master_scoreboard = json.load(open("master_scoreboard.json"))
+	summary_tweeter = Tweeter()
+
 	loops = 0
 
 	for record in master_scoreboard['data']['games']['game']:
@@ -116,7 +119,7 @@ if queue:
 
 				query = "UPDATE `games` SET `finished` = 1, `full_summary` = \"%s\", `teaser_text` = \"%s\" WHERE `game_id` = '%s' LIMIT 1;" % (summary, teaser_text, record['id'])
 				cur.execute(query)
-
+				summary_tweeter.post_summary(teaser_text)
 				loops = loops + 1
 
 	print "Updated %d game(s)" % loops
