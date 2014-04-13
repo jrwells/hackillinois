@@ -17,10 +17,10 @@ URL_REGEX = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0
 class TwitterScraper:
   def __init__(self):
     # login as unclecsporttime
-    self.api = twitter.Api(consumer_key='bzlEXMYo3FKTRpLUdo4VegqAU',
-        consumer_secret='EfNNNwnYok554xtWnnCB5owumZihU8QUsxwIu5R9cPbj86WxFG',
-        access_token_key='2440307432-b601xzDLLzr9nm4FckxcZN6o2jsvgce0AHJfmAZ',
-        access_token_secret='snt0USzE8WfGeSB27kmiMaDtZYyJAJeWwLjQZZTXMWlgb')
+    self.api = twitter.Api(consumer_key='UUglFzLUxQzdTxDHssbX4g',
+        consumer_secret='Cz006KLdT8vCDMpJJQSeAY69BXzEmE0Eup5mNzxyxQ',
+        access_token_key='2440307432-NNZwDBvTk1dOikeMakZD2zShgWey1k7pB1tc1vs',
+        access_token_secret='OAGVt4Hq6dzX7NbpXaC1jmsnHPsxjvWVp85ydOhK54tHJ')
     self.aa = AlchemyAPI()
 
   """

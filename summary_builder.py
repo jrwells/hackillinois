@@ -170,10 +170,12 @@ class SummaryBuilder:
                 if e_owner == add.event_owner:
                   will_add = False
         if will_add:
-          strings.append(str(event.teaser))
+          strings.append(str(event.convert_teaser()))
         added.append(event)
-
-    return " ".join(strings)
+    teaser_string = " ".join(strings)
+    for key in TEAMS.keys():
+      teaser_string = teaser_string.replace(key, TEAMS[key][0])
+    return teaser_string
 
 
 
