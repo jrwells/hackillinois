@@ -6,3 +6,6 @@ class Event:
 		self.weight = weight
 		self.team_name = team_name
 		self.team_won = team_won
+
+	def __str__(self):
+		return "The " + self.team_name + " " + self.description

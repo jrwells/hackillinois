@@ -32,7 +32,7 @@ class EventBuilder:
 
 		self.gameData = gameData
 
-		self.build_events()
+
 
 	def build_events(self):
 		#inning runs total runs
@@ -59,8 +59,8 @@ class EventBuilder:
 		rbi_percentage = self.build_rbi_events(Metrics.RBIDistribution(self.gameData))
 		print rbi_percentage
 
-		# return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
-			# lead_changes + rbi_percentage)
+		return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
+			lead_changes + rbi_percentage)
 
 	def build_inning_events(self, inning_metrics):
 		""" Builds the events for highest scoring innings, returns a list of

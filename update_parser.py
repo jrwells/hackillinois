@@ -2,6 +2,7 @@ import datetime, json, urllib2, MySQLdb
 from summarize import *
 from metrics import *
 from event_builder import *
+from summary_builder import *
 
 def resetDB():
 	query = "UPDATE `games` SET `finished` = 0;"
@@ -26,30 +27,30 @@ def generateSummary(gameData):
 	blurbs = []
 
 	# notable things - no hitters, perfect games, etc.
-	blurbs.append(Summarize.get_no_hitter(gameData))
+	#blurbs.append(Summarize.get_no_hitter(gameData))
 
 	# grand slams and home runs
-	blurbs.append(Summarize.get_home_runs(gameData))
+	#blurbs.append(Summarize.get_home_runs(gameData))
 
 	# errors
-	blurbs.append(Summarize.get_errors(gameData))
+	#blurbs.append(Summarize.get_errors(gameData))
 
 	# perfect game
-	blurbs.append(Summarize.get_perfect_game(gameData))
+	#blurbs.append(Summarize.get_perfect_game(gameData))
 
 	# mvp batter
-	blurbs.append(Summarize.get_mvp_batter(gameData))
+	#blurbs.append(Summarize.get_mvp_batter(gameData))
 
 	# winning pitcher
-	blurbs.append(Summarize.get_winning_pitcher(gameData))
+	#blurbs.append(Summarize.get_winning_pitcher(gameData))
 
 	# get top 3 blurbs
-	blurbs.sort()
-	blurbs.reverse()
+	#blurbs.sort()
+	#blurbs.reverse()
 
-	for i in range(0, len(blurbs)):
-		if blurbs[i][0] > 0:
-			summary = summary + " " + blurbs[i][1]
+	#for i in range(0, len(blurbs)):
+#		if blurbs[i][0] > 0:
+	#		summary = summary + " " + blurbs[i][1]
 
 	#inning runs total runs
 	# summary += '<br> Inning Runs / Total Runs: %s' % (str(Metrics.InningRunsTotalRuns(gameData))).replace("'", '')
@@ -68,10 +69,12 @@ def generateSummary(gameData):
 
 	# #RBI percentage
 	# summary += '<br> RBI Percentage: %s' % (str(Metrics.RBIDistribution(gameData))).replace("'", '')
+	event_builder = EventBuilder(gameData)
+	summary_builder = SummaryBuilder(summary, gameData['away_team_name'], gameData['home_team_name'] )
+	for event in event_builder.build_events():
+		summary_builder.add_event(event)
 
-	EventBuilder(gameData)
-
-	return summary
+	return summary_builder.build_summary()
 
 def generateTeaserText(gameData):
 	return ""
