@@ -89,8 +89,9 @@ class Event_builder:
 				innings = pitching_metrics["first_sub_" + key]
 
 				pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
+				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.2 * strikeouts)
 
-				events.append(event(pitcher_blurb, STAR_PITCHER_BASE_WEIGHT, this_team_won))
+				events.append(event(pitcher_blurb, event_weight, this_team_won))
 
 		return events
 
