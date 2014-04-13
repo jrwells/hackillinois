@@ -1,18 +1,20 @@
-#Creates the events based on data from metrics
+# Creates the events based on data from metrics
 from event import *
 from debug import log
 
-#Arbitrary Constants
+# Arbitrary Constants
 INNING_RUN_PERCENT_THRESHOLD = .4
 INNING_RUN_TOTAL_THRESHOLD = 3
 INNING_RUN_LOSS_MULTIPLIER = .75
 IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED = 8
+TEAM_AVERAGE_INTERESTINGNESS_THRESHOLD = 0.05
 
 # Arbitrary Weights
 INNING_RUN_MAX_WEIGHT = .7
 STAR_PITCHER_BASE_WEIGHT = 0.4
 NON_RBI_RUNS_MAX_WEIGHT = -0.6
 NON_RBI_RUNS_WEIGHT_PER = -0.08
+TEAM_AVERAGE_DIFFERENCE_POINTS = 0.1
 
 from metrics import *
 from summary_builder import *
@@ -53,8 +55,8 @@ class EventBuilder:
 		rbi_percentage = self.build_rbi_events(Metrics.RBIDistribution(self.gameData))
 		print rbi_percentage
 
-		return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
-			lead_changes + rbi_percentage)
+		# return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
+			# lead_changes + rbi_percentage)
 
 	def build_inning_events(self, inning_metrics):
 		""" Builds the events for highest scoring innings, returns a list of
@@ -134,13 +136,35 @@ class EventBuilder:
 				log("win: %s" % this_team_won)
 
 		return events
+		#([(<LAST NAME>, <RBIs>, <RBI_PERCENTAGE>), ... etc) """
 
 	def build_batting_average_events(self, batting_metrics):
-		return []
+		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
+		team_types = ["away", "home"]
+		events = []
+
+		for i in range(0, len(team_types)):
+			if abs(batting_metrics[i]) > TEAM_AVERAGE_INTERESTINGNESS_THRESHOLD:
+				weight = TEAM_AVERAGE_DIFFERENCE_POINTS * batting_metrics[i]
+
+				if weight > 0:
+					blurb = "were hot at the plate."
+				else:
+					blurb = "had a cold offense."
+
+				events.append(Event(blurb, weight, team_names[i], self.winning_team == team_types[i]))
+
+				log("weight: %d" % weight)
+				log("blurb: " + team_names[i] + " " + blurb)
+
+			else:
+				log("fuck fuck fuck fuck fuck %d" % batting_metrics[i])
+
+		return events
 
 	def build_lead_change_events(self, lead_metrics):
-		return []
+		None
 
 	def build_rbi_events(self, rbi_metrics):
-		return []
+		None
 
