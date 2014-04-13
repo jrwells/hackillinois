@@ -98,8 +98,8 @@ resetDB()
 queue = getUnfinishedGames()
 
 if queue:
-	# master_scoreboard = json.load(urllib2.urlopen(url))
-	master_scoreboard = json.load(open("master_scoreboard.json"))
+	master_scoreboard = json.load(urllib2.urlopen(url))
+	# master_scoreboard = json.load(open("master_scoreboard.json"))
 	loops = 0
 
 	for record in master_scoreboard['data']['games']['game']:
