@@ -14,6 +14,7 @@ REAL_DATA = False # each run costs 4 api calls to Alchemy - don't overuse
 TEAMS = {"Orioles":["#Orioles","@Orioles"],
          "Red Sox":["#RedSox","@RedSox"],
          "Yankees":["#Yankees","@Yankees"],
+         "Rays":["#Rays","@RaysBaseball"],
          "Devil Rays":["#Rays","@RaysBaseball"],
          "Blue Jays":["#BlueJays","@BlueJays"],
          "White Sox":["#WhiteSox","@WhiteSox"],
@@ -36,10 +37,12 @@ TEAMS = {"Orioles":["#Orioles","@Orioles"],
          "Brewers":["#Brewers","@Brewers"],
          "Cardinals":["#STLCards","#Cardinals","@Cardinals"],
          "Diamondbacks":["#DBack","#Diamondbacks","@DBacks"],
+         "D-backs":["#DBack","#Diamondbacks","@DBacks"],
          "Rockies":["#Rockies","@Rockies"],
          "Dodgers":["#Dodgers","@Dodgers"],
          "Padres":["#Padres","@Padres"],
-         "Giants":["#SFGiants","@SFGiants"]}
+         "Giants":["#SFGiants","@SFGiants"],
+         "Pirates":["#Pirates","@Pirates"]}
 
 class SummaryBuilder:
   def __init__(self, main_description, winning_team, losing_team):
