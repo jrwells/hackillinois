@@ -4,7 +4,7 @@ from debug import log
 import twitter_scraper
 import pickle
 
-SHAME_WEIGHT = 0.10
+SHAME_WEIGHT = 0.20
 RELEVANCE_WEIGHT = 0.10
 
 MAX_STRINGS = 6
@@ -86,7 +86,7 @@ class SummaryBuilder:
       else:
         adjusted_shame_weight = SHAME_WEIGHT
 
-      real_weight = abs(weight + adjusted_shame_weight) #apply the shameeeeee
+      real_weight = abs(min(weight + adjusted_shame_weight, 0.0)) #apply the shameeeeee
 
     ## TODO: APPLY RELEVANCE + SENTIMENT ANALYSIS
     relevance = 0.0
@@ -110,6 +110,6 @@ class SummaryBuilder:
     strings = [self.main_description]
     while len(strings) < MAX_STRINGS and not self.pq.empty():
       pri,event = self.pq.get_nowait()
-      strings.append(event.description)
+      strings.append(str(event))
 
     return " ".join(strings)
