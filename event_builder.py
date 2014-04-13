@@ -193,20 +193,22 @@ class EventBuilder:
 		events = []
 		index = 0
 		for team in rbi_metrics:
-			blurb = ''
-			if len(team) > 1:
-				players = [p[0] for p in team]
-				rbis = map(int,[p[1] for p in team])
-				rbi_percent = map(float, [p[2] for p in team])
-				blurb = ','.join(players)
-				blurb += " hit a combined %s RBIs" % (sum(rbis))
-				weight = sum(rbi_percent) / len(rbi_percent)
-				events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_names[team_types[index]]))
-			else:
-				player = team[0]
-				blurb = "%s hit %s RBIs" % (player[0], player[1])
-				weight = float(player[2])
-				events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_names[team_types[index]]))
+			if team:
+				blurb = ''
+				if len(team) > 1:
+					players = [p[0] for p in team]
+					rbis = map(int,[p[1] for p in team])
+					rbi_percent = map(float, [p[2] for p in team])
+					blurb = ','.join(players)
+					blurb += " hit a combined %s RBIs" % (sum(rbis))
+					weight = sum(rbi_percent) / len(rbi_percent)
+					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_names[team_types[index]]))
+				else:
+					print team
+					player = team[0]
+					blurb = "%s hit %s RBIs" % (player[0], player[1])
+					weight = float(player[2])
+					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_names[team_types[index]]))
 		return events
 
 
