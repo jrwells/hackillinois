@@ -1,4 +1,5 @@
 #Creates the events based on data from metrics
+from event import *
 
 #Arbitrary Constants
 INNING_RUN_PERCENT_THRESHOLD = .4
@@ -34,20 +35,36 @@ class Event_builder:
 		#RBI percentage
 		rbi_percentage = Metrics.RBIDistribution(gameData)
 
+		return (inning_runs + walked_runs + pitching_changes + game_batting_ave +
+			lead_changes + rbi_percentage)
+
 	def build_inning_events(self, inning_metrics):
+		""" Builds the events for highest scoring innings, returns a list of
+			events. """
+		#Needed to look up team data and names
+		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
 		team_designation = ('away','home')
 		team_index = 0
-		team_weights = [None,None]
-		team_desc = ['','']
-		scores = (int(self.gameData['linescore']['r']['away']), int(self.gameData['linescore']['r']['home']) )
+		team_desc = ''
+		events = []
 		for team in inning_metrics:
-			weight = float(team[0]) * float(team[1]) / float(self.gameData['status']['inning']) * min(1, INNING_RUN_PERCENT_THRESHOLD / float(team[0])) * min(1, INNING_RUN_TOTAL_THRESHOLD / float(self.gameData['linescore']['inning'][int(team[1])][team_designation[team_index]])) * INNING_RUN_MAX_WEIGHT
+			#Runs the equation to determine the weight, dependant entirely on
+			#constants at the start of the file
+			weight = float(team[team_designation[team_index]+'_max']) * float(team[team_designation[team_index]+'_inning']) / float(self.gameData['status']['inning']) * min(1, INNING_RUN_PERCENT_THRESHOLD / float(team[team_designation[team_index]+'_max'])) * min(1, INNING_RUN_TOTAL_THRESHOLD / team[team_designation[team_index]+'_value']) * INNING_RUN_MAX_WEIGHT
+			#If they lose, inflict a weight penalty
 			if self.winning_team != team_designation[team_index]:
 				weight = weight / float(self.gameData['linescore']['r']['diff']) * INNING_RUN_LOSS_MULTIPLIER
 
-
-			team_weights[team_index] = weight
+			#Crazy stuff to print ordinal numbers
+			runs = int(team[team_designation[team_index]+'_value'])
+			k = runs%10
+			team_desc = "scored %s runs in the %s%s inning" % (team_names[team_index), runs, "%d%s"%(runs,"tsnrhtdd"[(runs/10%10!=1)*(k<4)*k::4]))
 			team_index += 1
+			#adds the new a event to the event list
+			events.append(event(team_desc, weight,self.winning_team))
+
+		return events
+
 	def build_walks_events(self, walks_metrics):
 
 	def build_pitching_change_events(self, pitching_metrics):
