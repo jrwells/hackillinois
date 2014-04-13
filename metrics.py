@@ -53,10 +53,16 @@ class Metrics:
 
 	@staticmethod
 	def getPitcherStats(game_data):
-		stats = dict()
-		for team in game_data["pitching"]:
-				stats["strikeouts_" + team["team_flag"]] = team["pitcher"][0]["so"]
-				stats["name_" + team["team_flag"]] = team["pitcher"][0]["name"].split(",")[0]
+		stats = {}
+		for team in game_data["boxscore"]["pitching"]:
+			try:
+				temp = team["pitcher"][0]
+			except:
+				team["pitcher"] = [team["pitcher"]]
+
+			stats["strikeouts_" + team["team_flag"].encode("ascii")] = team["pitcher"][0]["so"].encode("ascii")
+			stats["name_" + team["team_flag"].encode("ascii")] = team["pitcher"][0]["name"].split(",")[0].encode("ascii")
+
 		return stats
 
 	@staticmethod
@@ -95,7 +101,7 @@ class Metrics:
 			"total_subs_home" : total_home
 		}
 
-		result.update(self.getPitcherStats(game_data))
+		result.update(Metrics.getPitcherStats(game_data))
 
 		return result
 

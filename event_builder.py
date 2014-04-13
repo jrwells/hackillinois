@@ -54,14 +54,9 @@ class Event_builder:
 
 			team_weights[team_index] = weight
 			team_index += 1
+
 	def build_walks_events(self, walks_metrics):
-
-	""" Generate a nice string with the name & strikeout count of a pitcher """
-	def get_pitcher_strikeouts(self, home):
-		if home:
-
-		else:
-
+		None
 
 	def build_pitching_change_events(self, pitching_metrics):
 		# check away team
