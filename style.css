@@ -1,20 +1,39 @@
 body {
-		padding-top: 10%;
+	padding-top: 10%;
+}
+
+h1 {
+	font-weight: normal;
+}
+
+h2 {
+	line-height: 1.3em;
+	font-weight: normal;
+	margin-top: 0;
+	margin-bottom: 3%;
+	color: #333;
+}
+
+p.lead {
+	text-align: center;
+	margin-bottom: 10%;
+}
+
+	h1 small {
+		font-weight: 100;
+		letter-spacing: 1px;
+		color: #333;
 	}
 
-	h2 {
-		line-height: 1.3em !important;
-		font-weight: normal !important;
-		margin-bottom: 5%;
-	}
+.meta p {
+	color: #333;
+	font-size: 2em;
+	font-weight: 100;
+	letter-spacing: 1px;
+}
 
-	p.lead {
-		text-align: center;
-		margin-bottom: 10%;
-	}
-
-	.moregames {
-		text-align: center;
-		margin-bottom: 5%;
-		font-weight: normal !important;
-	}
+.moregames {
+	text-align: center;
+	margin-bottom: 5%;
+	font-weight: normal;
+}
