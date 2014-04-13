@@ -1,12 +1,18 @@
-body {
-	padding-top: 10%;
-}
-
 h1 {
 	font-weight: normal;
 }
 
-h2 {
+.top {
+	text-align: center;
+	margin-top: 4%;
+	margin-bottom: 9%;
+}
+
+	.top button {
+		margin-top: 10%;
+	}
+
+.game h2 {
 	line-height: 1.3em;
 	font-weight: normal;
 	margin-top: 0;
@@ -23,6 +29,13 @@ p.lead {
 		font-weight: 100;
 		letter-spacing: 1px;
 		color: #333;
+	}
+
+	h2 small {
+		font-weight: 100;
+		color: #333;
+		letter-spacing: 1px;
+		font-size: 1.3em;
 	}
 
 .meta p {
