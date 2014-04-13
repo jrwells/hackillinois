@@ -113,7 +113,7 @@ if queue:
 				summary = generateSummary(record)
 				teaserText = generateTeaserText(record)
 
-				query = "UPDATE `games` SET `finished` = 1, `full_summary` = '%s' WHERE `game_id` = '%s' LIMIT 1;" % (summary, record['id'])
+				query = "UPDATE `games` SET `finished` = 1, `full_summary` = \"%s\" WHERE `game_id` = '%s' LIMIT 1;" % (summary, record['id'])
 				cur.execute(query)
 
 				loops = loops + 1
