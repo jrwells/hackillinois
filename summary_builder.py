@@ -49,6 +49,8 @@ class SummaryBuilder:
     ts = twitter_scraper.TwitterScraper()
     self.pq = Queue.PriorityQueue()
     self.main_description = main_description
+    self.winning_team = winning_team
+    self.losing_team = losing_team
     if REAL_DATA:
       ## TODO: map team names to their hashtags
       if winning_team in TEAMS:
@@ -111,8 +113,17 @@ class SummaryBuilder:
   """
   def build_summary(self):
     strings = [self.main_description]
+    winning_events, losing_events = [], []
     while len(strings) < MAX_STRINGS and not self.pq.empty():
-      pri,event = self.pq.get_nowait()
+      pri, event = self.pq.get_nowait()
+      if event.team_name == self.winning_team:
+        winning_events.append(event)
+      else:
+        losing_events.append(event)
+    winning_events.sort(key=lambda x: x.event_type, reverse=False)
+    losing_events.sort(key=lambda x: x.event_type, reverse=False)
+    events = winning_events + losing_events
+    for event in events:
       strings.append(str(event))
 
     return " ".join(strings)

@@ -22,6 +22,12 @@ LEAD_CHANGE_MAX_WEIGHT = 0.5
 HOME_RUN_WEIGHT = 0.4
 HOME_RUN_RUNNER_BONUS = 0.09
 
+# Event Types
+SUMMARIZING = 0
+SCORING_TEAM = 1
+SCORING_INDIVIDUAL = 2
+PITCHING = 3
+
 
 from metrics import *
 from summary_builder import *
@@ -65,6 +71,7 @@ class EventBuilder:
 	def build_inning_events(self, inning_metrics):
 		""" Builds the events for highest scoring innings, returns a list of
 			events. """
+		event_type = SCORING_TEAM
 		#Needed to look up team data and names
 		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
 		team_designation = ('away','home')
@@ -92,7 +99,7 @@ class EventBuilder:
 			team_index += 1
 
 			#adds the new a event to the event list
-			events.append(Event(team_desc, weight, team_names[team], self.winning_team == team))
+			events.append(Event(team_desc, weight, team_names[team], event_type, self.winning_team == team))
 			log("team_desc: %s" % team_desc)
 			log("weight: %s" % weight)
 			log("winz %s" % self.winning_team)
@@ -100,6 +107,7 @@ class EventBuilder:
 		return events
 
 	def build_walks_events(self, walks_metrics):
+		event_type = SUMMARIZING
 		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
 		team_designation = ('away','home')
 
@@ -110,7 +118,7 @@ class EventBuilder:
 			blurb = "had a defensive breakdown"
 
 			if weight > 0:
-				events.append(Event(blurb, weight, team_names[i], team_designation[i] == self.winning_team))
+				events.append(Event(blurb, weight, team_names[i], event_type, team_designation[i] == self.winning_team))
 
 				log("weight: %d" % weight)
 				log("blurb: " + team_names[i] + " " + blurb)
@@ -121,6 +129,7 @@ class EventBuilder:
 		return events
 
 	def build_pitching_change_events(self, pitching_metrics):
+		event_type = PITCHING
 		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
 		team_types = ["away", "home"]
 		events = []
@@ -137,7 +146,7 @@ class EventBuilder:
 				pitcher_blurb = "%s pitched %s strikeouts in %s innings" % (pitcher_name, strikeouts, innings)
 				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.025 * int(strikeouts))
 
-				events.append(Event(pitcher_blurb, event_weight, team_names[key], this_team_won))
+				events.append(Event(pitcher_blurb, event_weight, team_names[key], event_type, this_team_won))
 				log("pitcher blrub: %s" % pitcher_blurb)
 				log("event_weight: %s" % event_weight)
 				log("win: %s" % this_team_won)
@@ -145,6 +154,7 @@ class EventBuilder:
 		return events
 
 	def build_batting_average_events(self, batting_metrics):
+		event_type = SUMMARIZING
 		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
 		team_types = ["away", "home"]
 		events = []
@@ -158,7 +168,7 @@ class EventBuilder:
 				else:
 					blurb = "had an off night for offense"
 
-				events.append(Event(blurb, weight, team_names[i], self.winning_team == team_types[i]))
+				events.append(Event(blurb, weight, team_names[i], event_type, self.winning_team == team_types[i]))
 
 				log("weight: %d" % weight)
 				log("blurb: " + team_names[i] + " " + blurb)
@@ -166,6 +176,7 @@ class EventBuilder:
 		return events
 
 	def build_lead_change_events(self, lead_metrics):
+		event_type = SUMMARIZING
 		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
 		team_types = ["away", "home"]
 		events = []
@@ -175,7 +186,7 @@ class EventBuilder:
 		if lead_metrics['change_count'] == 1:
 			weight = LEAD_CHANGE_TAKE_AND_HOLD_WEIGHT
 			blurb = "took the lead and never gave it up"
-			events.append(Event(blurb, weight, team_names[self.winning_team], True))
+			events.append(Event(blurb, weight, team_names[self.winning_team], event_type, True))
 
 		elif lead_metrics['change_count'] > LEAD_CHANGE_THRESHOLD:
 			weight = LEAD_CHANGE_MAX_WEIGHT * float(lead_metrics['last_change']) / float(self.gameData['status']['inning'])
@@ -183,7 +194,7 @@ class EventBuilder:
 			k = final_inning%10
 			ordinal_val = "%d%s"%(final_inning,"tsnrhtdd"[(final_inning/10%10!=1)*(k<4)*k::4])
 			blurb = "battled for the lead and finally held it in the %s inning" % (ordinal_val)
-			events.append(Event(blurb, weight, team_names[self.winning_team], True))
+			events.append(Event(blurb, weight, team_names[self.winning_team], event_type, True))
 
 		log("weight: %d" % weight)
 		log("blurb: " + team_names[self.winning_team] + " " + blurb)
@@ -191,6 +202,7 @@ class EventBuilder:
 		return events
 
 	def build_rbi_events(self, rbi_metrics):
+		event_type = SCORING_INDIVIDUAL
 		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
 		team_types = ["away", "home"]
 		events = []
@@ -207,9 +219,9 @@ class EventBuilder:
 					plural = ''
 					if s_rbis > 1:
 						plural = 's'
-					blurb += " hit a combined %s RBI%s" % (s_bis, plural)
+					blurb += " hit a combined %s RBI%s" % (s_rbis, plural)
 					weight = sum(rbi_percent) / len(rbi_percent)
-					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
+					events.append(Event(blurb,weight,team_names[team_types[index]], event_type, self.winning_team == team_types[index]))
 				else:
 					print team
 					player = team[0]
@@ -218,11 +230,12 @@ class EventBuilder:
 						plural = 's'
 					blurb = "%s hit %s RBI%s" % (player[0], player[1], plural)
 					weight = float(player[2])
-					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
+					events.append(Event(blurb,weight,team_names[team_types[index]], event_type, self.winning_team == team_types[index]))
 			index+=1
 		return events
 
 	def build_homerun_events(self, game_data):
+		event_type = SCORING_INDIVIDUAL
 		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
 		team_codes = { game_data["away_code"] : "away", game_data["home_code"] : "home" }
 		events = []
@@ -246,7 +259,7 @@ class EventBuilder:
 				blurb = hr['last'] + " hit a grand slam"
 				team_name = team_names[team_codes[hr['team_code'].encode("ascii")]]
 				weight = HOME_RUN_WEIGHT + float(hr['runners']) * HOME_RUN_RUNNER_BONUS
-				events.append(Event(blurb, weight, team_name, team_codes[hr['team_code']] == self.winning_team))
+				events.append(Event(blurb, weight, team_name, event_type, team_codes[hr['team_code']] == self.winning_team))
 
 		# report player home runs
 		max_hr = 0
@@ -265,7 +278,7 @@ class EventBuilder:
 			blurb = hr['last'] + " hit a %s" % hr_noun
 			team_name = team_names[team_codes[hr['team_code'].encode("ascii")]]
 			weight = HOME_RUN_WEIGHT + int(hr['runners']) * HOME_RUN_RUNNER_BONUS
-			events.append(Event(blurb, weight, team_name, team_codes[hr['team_code']] == self.winning_team))
+			events.append(Event(blurb, weight, team_name, event_type, team_codes[hr['team_code']] == self.winning_team))
 
 		return events
 
