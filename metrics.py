@@ -149,8 +149,10 @@ class Metrics:
 		""" Count the number of times a team takes the lead """
 
 		change_count = 0
+		first_change, last_change = 0, 0
 		away_score, home_score = 0, 0
 		leader = None
+		inningCount = 1
 		for i in game_data['linescore']['inning']:
 
 			away_score += int(i['away'])
@@ -159,6 +161,11 @@ class Metrics:
 				leader = "away"
 				change_count += 1
 
+				if first_change == 0:
+					first_change = inningCount
+
+				last_change = inningCount
+
 			if 'home' in i:
 				home_score += int(i['home'])
 
@@ -166,7 +173,20 @@ class Metrics:
 				leader = "home"
 				change_count += 1
 
-		return change_count
+				if first_change == 0:
+					first_change = inningCount
+
+				last_change = inningCount
+
+			inningCount += 1
+
+		result = {
+			"change_count" : change_count,
+			"first_change" : first_change,
+			"last_change" : last_change
+		}
+
+		return result
 
 	@staticmethod
 	def RBIDistribution(game_data):
