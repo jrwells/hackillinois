@@ -272,7 +272,7 @@ class EventBuilder:
 						count = player[1]
 					action_word = random.choice(['hit', 'managed', 'scored', 'tallied', 'recorded'])
 					blurb = "%s %s %s RBI%s" % (player[0], action_word, count, plural)
-					short_blurb = "%s %s RBI %s" % (player[0], player[1], plural)
+					short_blurb = "%s %s RBI%s" % (player[0], player[1], plural)
 					weight = float(player[2])
 					event_owner = player
 					events.append(Event(blurb,weight,team_names[team_types[index]], event_type, event_owner, short_blurb, self.winning_team == team_types[index]))
