@@ -215,7 +215,7 @@ class EventBuilder:
 			ordinal_val = "%d%s"%(inning,"tsnrhtdd"[(inning/10%10!=1)*(k<4)*k::4])
 			classic_blurb = "took the lead in the %s and never gave it up" % (ordinal_val)
 			blurb = random.choice([classic_blurb, 'were never behind', 'stayed on top the whole game', 'kept the lead out of reach'])
-			short_blurb = "lead from %s" % (ordinal_val)
+			short_blurb = "led from %s" % (ordinal_val)
 			events.append(Event(blurb, weight, team_names[self.winning_team], event_type, None, short_blurb, True))
 
 		elif lead_metrics['change_count'] > LEAD_CHANGE_THRESHOLD:
