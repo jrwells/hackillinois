@@ -11,6 +11,8 @@ IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED = 8
 # Arbitrary Weights
 INNING_RUN_MAX_WEIGHT = .7
 STAR_PITCHER_BASE_WEIGHT = 0.4
+NON_RBI_RUNS_MAX_WEIGHT = -0.6
+NON_RBI_RUNS_WEIGHT_PER = -0.08
 
 from metrics import *
 from summary_builder import *
@@ -58,7 +60,7 @@ class EventBuilder:
 		""" Builds the events for highest scoring innings, returns a list of
 			events. """
 		#Needed to look up team data and names
-		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
+		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
 		team_designation = ('away','home')
 		team_index = 0
 		team_desc = ""
@@ -81,7 +83,7 @@ class EventBuilder:
 			team_index += 1
 
 			#adds the new a event to the event list
-			events.append(Event(team_desc, weight,self.winning_team == team))
+			events.append(Event(team_desc, weight, team_names[team], self.winning_team == team))
 			log("team_desc: %s" % team_desc)
 			log("weight: %s" % weight)
 			log("winz %s" % self.winning_team)
@@ -89,9 +91,23 @@ class EventBuilder:
 		return events
 
 	def build_walks_events(self, walks_metrics):
-		None
+		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
+		team_designation = ('away','home')
+
+		events = []
+		for i in range(0, len(walks_metrics)):
+			weight = NON_RBI_RUNS_WEIGHT_PER * walks_metrics[i]
+			weight = min(weight, NON_RBI_RUNS_MAX_WEIGHT)
+			blurb = "had a defensive breakdown."
+			events.append(Event(blurb, weight, team_names[i], team_designation[i] == self.winning_team))
+
+			log("weight: %d" % weight)
+			log("blurb: " + team_names[i] + " " + blurb)
+
+		return events
 
 	def build_pitching_change_events(self, pitching_metrics):
+		team_names = { "away" : self.gameData['away_team_name'], "home" : self.gameData['home_team_name'] }
 		team_types = ["away", "home"]
 		events = []
 
@@ -107,18 +123,19 @@ class EventBuilder:
 				pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
 				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.025 * int(strikeouts))
 
-				events.append(Event(pitcher_blurb, event_weight, this_team_won))
+				events.append(Event(pitcher_blurb, event_weight, team_names[key], this_team_won))
 				log("pitcher blrub: %s" % pitcher_blurb)
 				log("event_weight: %s" % event_weight)
 				log("win: %s" % this_team_won)
+
 		return events
 
 	def build_batting_average_events(self, batting_metrics):
-		None
+		return []
 
 	def build_lead_change_events(self, lead_metrics):
-		None
+		return []
 
 	def build_rbi_events(self, rbi_metrics):
-		None
+		return []
 
