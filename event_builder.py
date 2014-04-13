@@ -151,9 +151,9 @@ class EventBuilder:
 				weight = TEAM_AVERAGE_DIFFERENCE_POINTS * batting_metrics[i]
 
 				if weight > 0:
-					blurb = "were hot at the plate"
+					blurb = "were strong at the plate"
 				else:
-					blurb = "had a cold offense"
+					blurb = "had an off night for offence"
 
 				events.append(Event(blurb, weight, team_names[i], self.winning_team == team_types[i]))
 
