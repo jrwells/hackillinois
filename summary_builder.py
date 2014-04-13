@@ -64,13 +64,20 @@ class SummaryBuilder:
 
   """
   Add an event to the SummaryBuilder.  Arguments:
+    event: an Event
+
+    -- old description here for clarity --
     description: the string to add to the Summary
     weight: arbitrary measure of importance between 0<=w<=1
             shametext is negative
     (team_won: did this team win - True or False
         if None, this event doesn't correspond to a team.)
   """
-  def add_event(self,description,weight,team_won=None):
+  def add_event(self,event):
+    description = event.description
+    weight = event.weight
+    team_won = event.team_won
+
     if team_won == None or weight >= 0:
       real_weight = abs(weight)
     else:
@@ -94,7 +101,7 @@ class SummaryBuilder:
     real_weight = real_weight + (relevance * RELEVANCE_WEIGHT)
 
     log('pri %f, PUT "%s"'%(real_weight,description))
-    self.pq.put_nowait((1.0-real_weight,description))
+    self.pq.put_nowait((1.0-real_weight,event))
 
   """
   Build a summary for this game.
@@ -102,7 +109,7 @@ class SummaryBuilder:
   def build_summary(self):
     strings = [self.main_description]
     while len(strings) < MAX_STRINGS and not self.pq.empty():
-      pri,string = self.pq.get_nowait()
-      strings.append(string)
+      pri,event = self.pq.get_nowait()
+      strings.append(event.description)
 
     return " ".join(strings)
