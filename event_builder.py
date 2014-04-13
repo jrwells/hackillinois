@@ -95,7 +95,10 @@ class EventBuilder:
 			runs = int(inning_metrics[team+'_inning'])
 			k = runs%10
 			ordinal_val = "%d%s"%(runs,"tsnrhtdd"[(runs/10%10!=1)*(k<4)*k::4])
-			team_desc = "scored %s runs in the %s inning" % (inning_metrics[team+'_value'], ordinal_val )
+			plural = ''
+			if inning_metrics[team+'_value'] > 1:
+				plural = 's'
+			team_desc = "scored %s run%s in the %s inning" % (inning_metrics[team+'_value'], plural, ordinal_val )
 			team_index += 1
 
 			#adds the new a event to the event list
