@@ -225,7 +225,7 @@ class EventBuilder:
 			ordinal_val = "%d%s"%(final_inning,"tsnrhtdd"[(final_inning/10%10!=1)*(k<4)*k::4])
 			classic_blurb = "battled for the lead and finally held it in the %s inning" % (ordinal_val)
 			blurb = random.choice[classic_blurb,'fought a tough battle, but came out on top', 'won in a close one', 'really had to battle for the W']
-			short_blurb = "lead from %s" % (ordinal_val)
+			short_blurb = "led from %s" % (ordinal_val)
 			events.append(Event(blurb, weight, team_names[self.winning_team], event_type, None, short_blurb, True))
 
 		log("weight: %d" % weight)
