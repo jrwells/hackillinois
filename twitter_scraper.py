@@ -2,7 +2,8 @@ import twitter
 from alchemyapi import AlchemyAPI
 import pickle
 import re
-from datetime import datetime
+
+from debug import log
 
 # ARBITRARY CONSTANT FUNTIME
 RELEVANCE_FLOOR = 0.45
@@ -12,13 +13,6 @@ BLACKLIST_USERS = ['iBetWinners'] #tweet.user.screen_name
 BLACKLIST_ITEMS = ['@iBetWinners','RT ']
 
 URL_REGEX = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-
-# DEBUG
-DEBUG = True
-DEBUG_ALL = False # subtexts
-def log(str,sub=''):
-  if DEBUG_ALL or (DEBUG and (len(sub)==0)):
-    print "[%s]%s %s"%(datetime.now().time().isoformat(),sub,str)
 
 class TwitterScraper:
   def __init__(self):
@@ -94,8 +88,8 @@ class TwitterScraper:
         if 'score' in keyword['sentiment']:
           score = float(keyword['sentiment']['score'])
         else:
-          score = 0.0 #invalid don't look at me :()
-        results[keyword['text']] = {
+          score = 0.0 #invalid don't look at me :(
+        results[keyword['text'].lower()] = {
             'relevance':float(keyword['relevance']),
             'sentiment':keyword['sentiment']['type'],
             'score':score}
