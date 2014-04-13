@@ -7,12 +7,19 @@ $db = new mysqli(
 	'zLoV$&mF*M#w',
 	'colorap5_unclec');
 
-$listQuery = 'SELECT `full_summary` FROM `games` WHERE `start_time` < NOW() AND `finished` = 1;';
+$listQuery = 'SELECT `start_time`, `full_summary` FROM `games` WHERE `start_time` < NOW() AND `finished` = 1 ORDER BY `start_time` DESC;';
 
 $feed = '';
 if($result = $db->query($listQuery)) {
 	while($row = $result->fetch_assoc()) {
-		$feed .= '<h2>' . $row['full_summary'] . '</h2><br />';
+		$gametime = strtotime($row['start_time']);
+		$gametimeString = date("g:ia", $gametime);
+
+		$feed .= '<div class="meta col-md-1"><p>' . $gametimeString . "</p></div>\n";
+
+		$feed .= '<div class="col-md-10 col-md-offset-1">' . "\n";
+		$feed .= '<h2>' . $row['full_summary'] . "</h2><br />\n";
+		$feed .= "</div>\n";
 	}
 
 	if(!strlen($feed)) {
@@ -35,6 +42,7 @@ if($result = $db->query($remainingQuery)) {
 		$amount = "One";
 	}
 
+	$feed .= '<div class="clearfix"></div>';
 	$feed .= '<h1 class="moregames"><small>' . $amount . ' more game' . $s . ' today.</small></h1>';
 }
 
@@ -48,15 +56,16 @@ $houses = [
 	'Lap',
 	'Magical Place',
 	'Sports Dungeon',
+	'Bouncy Castle',
 	];
 $house = $houses[array_rand($houses, 1)];
 ?><!doctype html>
 <html lang="en">
 <head>
 	<title>Uncle Charlie's <?= $house; ?></title>
-	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
 	<div class="container">
