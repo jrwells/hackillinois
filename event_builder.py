@@ -207,7 +207,7 @@ class EventBuilder:
 					plural = ''
 					if s_rbis > 1:
 						plural = 's'
-					blurb += " hit a combined %s RBI%s" % (sum(rbis), plural)
+					blurb += " hit a combined %s RBI%s" % (s_bis, plural)
 					weight = sum(rbi_percent) / len(rbi_percent)
 					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
 				else:
