@@ -136,7 +136,6 @@ class EventBuilder:
 				log("win: %s" % this_team_won)
 
 		return events
-		#([(<LAST NAME>, <RBIs>, <RBI_PERCENTAGE>), ... etc) """
 
 	def build_batting_average_events(self, batting_metrics):
 		team_names = (self.gameData['away_team_name'], self.gameData['home_team_name'])
