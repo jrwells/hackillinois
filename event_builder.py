@@ -76,21 +76,23 @@ class Event_builder:
 		None
 
 	def build_pitching_change_events(self, pitching_metrics):
-		# check away team
-		if pitching_metrics[0][0] >= IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED:
-			this_team_won = (self.winning_team == "away")
-			strikeouts = self.gameData["linescore"]["so"][self.winning_team]
-			innings = self.gameData["status"]["innings"]
+		team_types = ["away", "home"]
+		events = []
 
-			if this_team_won:
-				pitcher_name = self.gameData["winning_pitcher"]["last"]
+		for key in team_types:
+			if pitching_metrics["first_sub_" + key] >= IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED:
 
-			else:
-				pitcher_name = self.gameData["losing_pitcher"]["last"]
+				this_team_won = (self.winning_team == key)
 
-			pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
+				pitcher_name = pitching_metrics["name_" + key]
+				strikeouts = pitching_metrics["strikeouts_" + key]
+				innings = pitching_metrics["first_sub_" + key]
 
-			return Event(pitcher_blurb, .6 this_team_won)
+				pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
+
+				events.append(event(pitcher_blurb, STAR_PITCHER_BASE_WEIGHT, this_team_won))
+
+		return events
 
 
 	def build_lead_change_events(self, lead_metrics):
