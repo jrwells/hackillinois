@@ -212,6 +212,7 @@ class EventBuilder:
 					blurb = "%s hit %s RBIs" % (player[0], player[1])
 					weight = float(player[2])
 					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
+			index+=1
 		return events
 
 	def build_homerun_events(self, game_data):
