@@ -204,15 +204,22 @@ class EventBuilder:
 				if len(team) > 1:
 					players = [p[0] for p in team]
 					rbis = map(int,[p[1] for p in team])
+					s_rbis = sum(rbis)
 					rbi_percent = map(float, [p[2] for p in team])
 					blurb = ' and '.join(players)
-					blurb += " hit a combined %s RBIs" % (sum(rbis))
+					plural = ''
+					if s_rbis > 1:
+						plural = 's'
+					blurb += " hit a combined %s RBI%s" % (s_bis, plural)
 					weight = sum(rbi_percent) / len(rbi_percent)
 					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
 				else:
 					print team
 					player = team[0]
-					blurb = "%s hit %s RBIs" % (player[0], player[1])
+					plural = ''
+					if player[1] > 1:
+						plural = 's'
+					blurb = "%s hit %s RBI%s" % (player[0], player[1], plural)
 					weight = float(player[2])
 					events.append(Event(blurb,weight,team_names[team_types[index]], self.winning_team == team_types[index]))
 			index+=1
