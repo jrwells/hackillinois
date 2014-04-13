@@ -67,7 +67,7 @@ class EventBuilder:
 			#Runs the equation to determine the weight, dependant entirely on
 			#constants at the start of the file
 			weight = float(inning_metrics[team+'_max']) * float(inning_metrics[team+'_inning']) / float(self.gameData['status']['inning']) * min(1, float(inning_metrics[team+'_max']) / INNING_RUN_PERCENT_THRESHOLD) * min(1, inning_metrics[team+'_value'] / INNING_RUN_TOTAL_THRESHOLD) * INNING_RUN_MAX_WEIGHT
-			print weight
+			log("weight: %s" % weight)
 			#If they lose, inflict a weight penalty
 			if self.winning_team != team:
 				weight = weight / float(self.gameData['linescore']['r']['diff']) * INNING_RUN_LOSS_MULTIPLIER
@@ -82,9 +82,9 @@ class EventBuilder:
 
 			#adds the new a event to the event list
 			events.append(Event(team_desc, weight,self.winning_team == team))
-			print "team_desc: ",team_desc
-			print "weight: ", weight
-			print "winz", self.winning_team
+			log("team_desc: %s" % team_desc)
+			log("weight: %s" % weight)
+			log("winz %s" % self.winning_team)
 
 		return events
 
