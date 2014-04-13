@@ -8,4 +8,4 @@ class Event:
 		self.team_won = team_won
 
 	def __str__(self):
-		return "The " + self.team_name + " " + self.description
+		return "The " + self.team_name + " " + self.description + "."
