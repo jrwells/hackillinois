@@ -185,8 +185,11 @@ class EventBuilder:
 
 		if lead_metrics['change_count'] == 1:
 			weight = LEAD_CHANGE_TAKE_AND_HOLD_WEIGHT
-			blurb = "took the lead and never gave it up"
-			events.append(Event(blurb, weight, team_names[self.winning_team], event_type, True))
+			inning = int(lead_metrics['first_change'])
+			k = inning%10
+			ordinal_val = "%d%s"%(inning,"tsnrhtdd"[(inning/10%10!=1)*(k<4)*k::4])
+			blurb = "took the lead in the %s and never gave it up" % (ordinal_val)
+			events.append(Event(blurb, weight, team_names[self.winning_team], True))
 
 		elif lead_metrics['change_count'] > LEAD_CHANGE_THRESHOLD:
 			weight = LEAD_CHANGE_MAX_WEIGHT * float(lead_metrics['last_change']) / float(self.gameData['status']['inning'])
