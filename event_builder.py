@@ -4,11 +4,11 @@ from event import *
 #Arbitrary Constants
 INNING_RUN_PERCENT_THRESHOLD = .4
 INNING_RUN_TOTAL_THRESHOLD = 3
-INNING_RUN_MAX_WEIGHT = .7
 INNING_RUN_LOSS_MULTIPLIER = .75
 IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED = 8
 
 # Arbitrary Weights
+INNING_RUN_MAX_WEIGHT = .7
 STAR_PITCHER_BASE_WEIGHT = .5
 
 from metrics import *
@@ -93,7 +93,6 @@ class Event_builder:
 				events.append(event(pitcher_blurb, STAR_PITCHER_BASE_WEIGHT, this_team_won))
 
 		return events
-
 
 	def build_lead_change_events(self, lead_metrics):
 
