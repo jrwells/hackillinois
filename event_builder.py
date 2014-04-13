@@ -9,7 +9,7 @@ IMPRESSIVE_AMOUNT_OF_INNINGS_PITCHED = 8
 
 # Arbitrary Weights
 INNING_RUN_MAX_WEIGHT = .7
-STAR_PITCHER_BASE_WEIGHT = .4
+STAR_PITCHER_BASE_WEIGHT = 0.4
 
 from metrics import *
 from summary_builder import *
@@ -103,7 +103,7 @@ class EventBuilder:
 				innings = pitching_metrics["first_sub_" + key]
 
 				pitcher_blurb = "%s pitched %s strikeouts in %s innings." % (pitcher_name, strikeouts, innings)
-				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.15 * int(strikeouts))
+				event_weight = STAR_PITCHER_BASE_WEIGHT + (0.015 * int(strikeouts))
 
 				events.append(Event(pitcher_blurb, event_weight, this_team_won))
 				print "pitcher blrub: ", pitcher_blurb
