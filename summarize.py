@@ -30,14 +30,14 @@ class Summarize:
 	def get_winner(game_data):
 		runs_scored = game_data['linescore']['r']
 		if int(runs_scored['home']) > int(runs_scored['away']):
-			winner = game_data['home_team_name']
+			winner = "The" + game_data['home_team_name']
 			winner_score = int(runs_scored['home'])
-			loser = game_data['away_team_name']
+			loser = "The" + game_data['away_team_name']
 			loser_score = int(runs_scored['away'])
 		else:
-			winner = game_data['away_team_name']
+			winner = "The" + game_data['away_team_name']
 			winner_score = int(runs_scored['away'])
-			loser = game_data['home_team_name']
+			loser = "The" + game_data['home_team_name']
 			loser_score = int(runs_scored['home'])
 
 		# check for extra innings
