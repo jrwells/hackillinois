@@ -154,7 +154,7 @@ class EventBuilder:
 				if weight > 0:
 					blurb = "were strong at the plate"
 				else:
-					blurb = "had an off night for offence"
+					blurb = "had an off night for offense"
 
 				events.append(Event(blurb, weight, team_names[i], self.winning_team == team_types[i]))
 

@@ -30,21 +30,21 @@ class Summarize:
 	def get_winner(game_data):
 		runs_scored = game_data['linescore']['r']
 		if int(runs_scored['home']) > int(runs_scored['away']):
-			winner = game_data['home_team_name']
+			winner = "The " + game_data['home_team_name']
 			winner_score = int(runs_scored['home'])
-			loser = game_data['away_team_name']
+			loser = "The " + game_data['away_team_name']
 			loser_score = int(runs_scored['away'])
 		else:
-			winner = game_data['away_team_name']
+			winner = "The " + game_data['away_team_name']
 			winner_score = int(runs_scored['away'])
-			loser = game_data['home_team_name']
+			loser = "The " + game_data['home_team_name']
 			loser_score = int(runs_scored['home'])
 
 		# check for extra innings
 		inning_count = int(game_data['status']['inning'])
 		extra_innings = ""
 		if inning_count > NORMAL_INNING_COUNT:
-			extra_innings = " in %d" % inning_count
+			extra_innings = " in %d innings" % inning_count
 
 		# pick an action verb
 		if winner_score - loser_score <= NARROW_THRESHOLD:
