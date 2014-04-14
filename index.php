@@ -57,7 +57,7 @@ if($result = $db->query($listQuery)) {
 	}
 
 	if(!strlen($feed)) {
-		$feed .= '<p class="lead">No games here yet... check back later!</p>';
+		$feed .= '<p class="lead">No games have finished yet... check back later!</p>';
 	}
 }
 
@@ -100,6 +100,7 @@ if($requestedDate == $today) {
 		$s = ($row[0] == 1) ? '' : 's';
 
 		$amount = $row[0];
+		$isOrAre = 'are';
 
 		if($amount == 0) {
 			$amount = "No";
@@ -107,10 +108,11 @@ if($requestedDate == $today) {
 
 		else if($amount == 1) {
 			$amount = "One";
+			$isOrAre = 'is';
 		}
 
 		$feed .= '<div class="clearfix"></div>';
-		$feed .= '<h1 class="moregames"><small>' . $amount . ' game' . $s . ' later today.</small></h1>';
+		$feed .= "<h1 class=\"moregames\"><small>There $isOrAre $amount game$s left today.</small></h1>";
 	}
 }
 
