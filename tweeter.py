@@ -18,7 +18,7 @@ class Tweeter:
 
 	# Returns a list of tweets, split by sentence. Works for text requring <10
 	# tweets
-	def split_tweet(tweet):
+	def split_tweet(self,tweet):
 		if len(tweet) <= 140:
 			return [tweet]
 
