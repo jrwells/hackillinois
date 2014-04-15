@@ -12,7 +12,7 @@ def resetDB():
 # return a list of game IDs for games that aren't finished
 def getUnfinishedGames():
 	# get games that have started and haven't finished
-	query = "SELECT `game_id` FROM `games` WHERE `start_time` < NOW() AND `finished` = 0;"
+	query = "SELECT `game_id` FROM `games` WHERE `start_time` < NOW() AND `start_time` > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND `finished` = 0;"
 	cur.execute(query)
 
 	gameQueue = []
@@ -122,6 +122,5 @@ if queue:
 				summary_tweeter.post_summary(teaser_text)
 				loops = loops + 1
 
-	print "Updated %d game(s)" % loops
-else:
-	print "No missing data ;)"
+	if loops > 0:
+		print "Updated %d game(s)" % loops
