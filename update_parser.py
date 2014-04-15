@@ -100,7 +100,7 @@ loops = 0
 
 while queue:
 	url = '%syear_%s/month_%02d/day_%02d/master_scoreboard.json' % (root, year, int(month), int(day))
-	print url
+
 	master_scoreboard = json.load(urllib2.urlopen(url))
 	# master_scoreboard = json.load(open("master_scoreboard.json"))
 	summary_tweeter = Tweeter()
