@@ -1,5 +1,5 @@
 #Twitter handler
-import twitter
+import twitter, math
 from debug import log
 
 class Tweeter:
@@ -12,23 +12,40 @@ class Tweeter:
         access_token_secret='OAGVt4Hq6dzX7NbpXaC1jmsnHPsxjvWVp85ydOhK54tHJ')
 
 	def post_summary(self,summary):
-		if len(summary) > 140:
-			sentences = summary.split('.')
-			summary_1 = ''
-			summary_2 = ''
-			for sentence in sentences:
-				if len(summary_1) + len(sentence) + 5 < 140:
-					summary_1 += sentence + '.'
+		for tweet_text in self.split_tweet(summary):
+			self.api.PostUpdate(tweet_text)
+		log("Posted summary %s" % summary)
+
+	# Returns a list of tweets, split by sentence. Works for text requring <10
+	# tweets
+	def split_tweet(tweet):
+		if len(tweet) <= 140:
+			return [tweet]
+
+		tweets = []
+
+		sentences = tweet.split('.')
+		cur_tweet_content = ''
+		cur_tweet_number = 1
+
+		while sentences:
+			cur_sent = sentences.pop(0).lstrip()
+			if cur_sent:
+				if len(cur_tweet_content) + len(cur_sent) + 2 < 131:
+					cur_tweet_content+=" " + cur_sent + '.'
 				else:
-					summary_1 += ' 1/2'
-					for sent in sentences[sentences.index(sentence):]:
-						summary_2 += sent + '.'
+					cur_tweet_content+='.. [%s/' % (cur_tweet_number)
+					cur_tweet_content = cur_tweet_content.lstrip()
+					tweets.append(cur_tweet_content)
+					cur_tweet_content = cur_sent+'.'
+					cur_tweet_number+=1
 
-					summary_2 += ' 2/2'
-					break
-			self.api.PostUpdate(summary_1)
-			self.api.PostUpdate(summary_2)
+		cur_tweet_content+=' [%s/' % (cur_tweet_number)
+		cur_tweet_content = cur_tweet_content.lstrip()
+		tweets.append(cur_tweet_content)
 
-		else:
-			self.api.PostUpdate(summary)
-			log("Posted summary %s" % summary)
+		for i in range(0,len(tweets)):
+			tweets[i] = tweets[i]+'%s]' % (cur_tweet_number)
+
+		return tweets
+
