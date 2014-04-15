@@ -1,5 +1,5 @@
 #Twitter handler
-import twitter, math
+import twitter
 from debug import log
 
 class Tweeter:
