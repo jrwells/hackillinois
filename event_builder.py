@@ -105,9 +105,9 @@ class EventBuilder:
 			if inning_metrics[team+'_value'] > 1:
 				run_word+='s'
 			points_word = random.choice([run_word, ''])
-			inning_word = random.choice(['inning', ''])
+			inning_word = random.choice([' inning', ''])
 
-			team_desc = "%s %s %s in the %s %s" % (score_word, inning_metrics[team+'_value'], points_word, ordinal_val,inning_word )
+			team_desc = "%s %s %s in the %s%s" % (score_word, inning_metrics[team+'_value'], points_word, ordinal_val,inning_word )
 			short_desc = "%d in %s" % (int(inning_metrics[team+'_value']), ordinal_val )
 			team_index += 1
 
